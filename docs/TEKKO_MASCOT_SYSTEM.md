@@ -96,5 +96,6 @@ Use Tekko for helpful product moments: onboarding, assistant status, empty state
 - [x] Add connecting state.
 - [x] Add Tekko to the landing page hero or trust section.
 - [x] Add Tekko to contact success feedback.
-- [ ] Extend the same state model to chatbot and agent dashboard surfaces.
+- [x] Add Tekko to Agent Dashboard header.
+- [ ] Extend the same state model to chatbot backend responses.
 - [ ] Add animation through Lottie or spritesheets after static assets are stable.
