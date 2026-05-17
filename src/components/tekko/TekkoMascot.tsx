@@ -10,6 +10,7 @@ type TekkoMascotProps = {
   showGlow?: boolean;
   className?: string;
   alt?: string;
+  preferProductionAsset?: boolean;
 };
 
 const stateMotion: Record<TekkoState, string> = {
@@ -30,10 +31,16 @@ export function TekkoMascot({
   showGlow = true,
   className = "",
   alt,
+  preferProductionAsset = true,
 }: TekkoMascotProps) {
   const asset = getTekkoAsset(state);
-  const [hasImageError, setHasImageError] = useState(false);
+  const [sourceIndex, setSourceIndex] = useState(0);
   const label = alt ?? asset.alt;
+  const sources = preferProductionAsset
+    ? [asset.sources.webp, asset.sources.png, asset.sources.svg]
+    : [asset.sources.svg];
+  const src = sources[sourceIndex];
+  const hasImageError = sourceIndex >= sources.length;
 
   return (
     <figure
@@ -60,14 +67,15 @@ export function TekkoMascot({
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={asset.src}
+          key={`${state}-${src}`}
+          src={src}
           alt={label}
           draggable={false}
           className={[
             tekkoSizeClasses[size],
             "relative z-10 object-contain drop-shadow-[0_18px_40px_rgba(16,185,129,0.22)]",
           ].join(" ")}
-          onError={() => setHasImageError(true)}
+          onError={() => setSourceIndex((current) => current + 1)}
         />
       )}
       <figcaption className="sr-only">{asset.message}</figcaption>
