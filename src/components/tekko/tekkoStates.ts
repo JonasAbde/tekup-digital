@@ -10,62 +10,73 @@ export type TekkoState =
 
 export type TekkoSize = "sm" | "md" | "lg" | "xl";
 
+export type TekkoAssetSources = {
+  webp: string;
+  png: string;
+  svg: string;
+};
+
 export type TekkoAsset = {
   src: string;
+  sources: TekkoAssetSources;
   alt: string;
   label: string;
   message: string;
 };
 
+function createTekkoAsset(state: TekkoState, meta: Omit<TekkoAsset, "src" | "sources">): TekkoAsset {
+  return {
+    ...meta,
+    src: `/tekko/tekko-${state}.svg`,
+    sources: {
+      webp: `/tekko/tekko-${state}.webp`,
+      png: `/tekko/tekko-${state}.png`,
+      svg: `/tekko/tekko-${state}.svg`,
+    },
+  };
+}
+
 export const tekkoAssets: Record<TekkoState, TekkoAsset> = {
-  idle: {
-    src: "/tekko/tekko-idle.svg",
+  idle: createTekkoAsset("idle", {
     alt: "Tekko, Tekup's AI mascot, waiting and ready to help",
     label: "Idle",
     message: "Ready when you are.",
-  },
-  thinking: {
-    src: "/tekko/tekko-thinking.svg",
+  }),
+  thinking: createTekkoAsset("thinking", {
     alt: "Tekko thinking while gathering context",
     label: "Thinking",
     message: "I’m gathering the right context...",
-  },
-  working: {
-    src: "/tekko/tekko-working.svg",
+  }),
+  working: createTekkoAsset("working", {
     alt: "Tekko working on an automation task",
     label: "Working",
     message: "Building your automation...",
-  },
-  success: {
-    src: "/tekko/tekko-success.svg",
+  }),
+  success: createTekkoAsset("success", {
     alt: "Tekko celebrating a completed automation",
     label: "Success",
     message: "Completed successfully.",
-  },
-  warning: {
-    src: "/tekko/tekko-warning.svg",
+  }),
+  warning: createTekkoAsset("warning", {
     alt: "Tekko warning that something needs review",
     label: "Warning",
     message: "Something needs your attention.",
-  },
-  error: {
-    src: "/tekko/tekko-error.svg",
+  }),
+  error: createTekkoAsset("error", {
     alt: "Tekko showing that something went wrong",
     label: "Error",
     message: "Something went wrong. Let’s fix it.",
-  },
-  sleeping: {
-    src: "/tekko/tekko-sleeping.svg",
+  }),
+  sleeping: createTekkoAsset("sleeping", {
     alt: "Tekko sleeping while offline or inactive",
     label: "Sleeping",
     message: "Offline or inactive.",
-  },
-  connecting: {
-    src: "/tekko/tekko-connecting.svg",
+  }),
+  connecting: createTekkoAsset("connecting", {
     alt: "Tekko connecting or re-establishing connection",
     label: "Connecting",
     message: "Establishing connection...",
-  },
+  }),
 };
 
 export const tekkoSizeClasses: Record<TekkoSize, string> = {
