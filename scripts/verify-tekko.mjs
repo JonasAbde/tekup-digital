@@ -15,6 +15,7 @@ const requiredFiles = [
   "public/tekko-widget.js",
   "docs/TEKKO_MASCOT_SYSTEM.md",
   "docs/TEKKO_IMPLEMENTATION_AUDIT.md",
+  "src/components/TekkoWidgetLoader.tsx",
 ];
 
 const requiredStates = [
@@ -94,9 +95,15 @@ if (existsSync(join(root, "src/app/tekko/page.tsx"))) {
 
 if (existsSync(join(root, "src/app/layout.tsx"))) {
   const layout = read("src/app/layout.tsx");
-  check(layout.includes("/tekko-widget.js"), "Root layout does not load the Tekko widget script");
-  check(layout.includes("TekkoWidget.init"), "Root layout does not initialize TekkoWidget");
-  check(layout.includes("https://chat.tekup.dk"), "Root layout does not point TekkoWidget at chat.tekup.dk");
+  check(layout.includes("TekkoWidgetLoader"), "Root layout does not import TekkoWidgetLoader");
+  check(layout.includes("<TekkoWidgetLoader"), "Root layout does not render TekkoWidgetLoader");
+}
+
+if (existsSync(join(root, "src/components/TekkoWidgetLoader.tsx"))) {
+  const loader = read("src/components/TekkoWidgetLoader.tsx");
+  check(loader.includes("/tekko-widget.js"), "TekkoWidgetLoader does not load the widget script");
+  check(loader.includes("TekkoWidget?.init"), "TekkoWidgetLoader does not initialize TekkoWidget");
+  check(loader.includes("https://chat.tekup.dk"), "TekkoWidgetLoader does not point TekkoWidget at chat.tekup.dk");
 }
 
 if (existsSync(join(root, "public/tekko-widget.js"))) {

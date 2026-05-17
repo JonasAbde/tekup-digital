@@ -1,5 +1,5 @@
-import Script from "next/script";
 import type { Metadata } from "next";
+import { TekkoWidgetLoader } from "@/components/TekkoWidgetLoader";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -127,8 +127,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
-        <Script src="/tekko-widget.js" strategy="afterInteractive" />
-        <Script id="tekko-init" strategy="afterInteractive">{`TekkoWidget.init({ apiUrl: "https://chat.tekup.dk" });`}</Script>
+        <TekkoWidgetLoader />
       </body>
     </html>
   );
