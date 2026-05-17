@@ -126,6 +126,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
+        <script src="/tekko-widget.js" />
+        <script>{`TekkoWidget.init({ apiUrl: "https://tekup-chat-worker.empire1266.workers.dev" });`}</script>
       </body>
     </html>
   );

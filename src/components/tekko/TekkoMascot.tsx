@@ -13,13 +13,13 @@ type TekkoMascotProps = {
 };
 
 const stateMotion: Record<TekkoState, string> = {
-  idle: "motion-safe:animate-pulse",
-  thinking: "motion-safe:animate-pulse",
-  working: "motion-safe:animate-pulse",
-  success: "motion-safe:scale-105",
-  warning: "",
+  idle: "motion-safe:animate-tekko-float",
+  thinking: "motion-safe:animate-tekko-think",
+  working: "motion-safe:animate-tekko-float",
+  success: "motion-safe:animate-tekko-success",
+  warning: "motion-safe:animate-tekko-think",
   error: "",
-  sleeping: "motion-safe:animate-pulse",
+  sleeping: "",
 };
 
 export function TekkoMascot({
