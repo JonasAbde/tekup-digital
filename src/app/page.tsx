@@ -554,38 +554,65 @@ function ContactInfo({
   );
 }
 
-function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+const SERVICE_OPTIONS = [
+  { value: "", label: "Vælg hvad du er interesseret i..." },
+  { value: "website-starter", label: "Website Starter — 14.999 kr." },
+  { value: "website-pro", label: "Website Pro — 34.999 kr." },
+  { value: "support-agent", label: "AI Support Agent — 2.499 kr./md." },
+  { value: "sales-agent", label: "AI Sales Agent — 3.999 kr./md." },
+  { value: "admin-agent", label: "Admin Agent — 1.999 kr./md." },
+  { value: "bundle-full", label: "Fuld pakke — spar 20%" },
+  { value: "seo-compliance", label: "SEO & Compliance — fra 999 kr." },
+  { value: "other", label: "Andet / ved ikke endnu" },
+];
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+function ContactForm() {
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
     const name = data.get("name") as string;
     const email = data.get("email") as string;
     const message = data.get("message") as string;
+    const service = data.get("service") as string;
+    const company = data.get("company") as string;
 
     if (!name || !email || !message) return;
 
-    // mailto fallback — replace with actual endpoint later
-    const subject = encodeURIComponent(`Ny henvendelse fra ${name} — Tekup.dk`);
-    const body = encodeURIComponent(
-      `Navn: ${name}\nEmail: ${email}\n\nBesked:\n${message}`
-    );
-    window.location.href = `mailto:hej@tekup.dk?subject=${subject}&body=${body}`;
+    setState("sending");
+    setErrorMsg("");
 
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message, service, company }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Kunne ikke sende besked");
+      }
+
+      setState("sent");
+    } catch (err) {
+      setState("error");
+      setErrorMsg(err instanceof Error ? err.message : "Der skete en fejl");
+    }
   }, []);
 
-  if (submitted) {
+  if (state === "sent") {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-brand/20 bg-brand/5 px-6 py-12 text-center">
         <svg className="h-12 w-12 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 className="mt-4 text-lg font-bold text-white">Tak for din besked!</h3>
+        <h3 className="mt-4 text-lg font-bold text-white">Tak for din henvendelse!</h3>
         <p className="mt-2 text-sm text-muted-light">
-          Vi vender tilbage inden for 2 timer i hverdagene.
+          Vi vender tilbage inden for 24 timer — typisk meget hurtigere.
         </p>
       </div>
     );
@@ -594,28 +621,58 @@ function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium text-muted-light">
-          Navn <span className="text-brand">*</span>
+        <label htmlFor="service" className="mb-1 block text-sm font-medium text-muted-light">
+          Jeg er interesseret i
+        </label>
+        <select
+          id="service"
+          name="service"
+          className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
+        >
+          {SERVICE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value} className="bg-card text-white">
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="name" className="mb-1 block text-sm font-medium text-muted-light">
+            Navn <span className="text-brand">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Dit navn"
+            className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="mb-1 block text-sm font-medium text-muted-light">
+            Email <span className="text-brand">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="din@email.dk"
+            className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
+          />
+        </div>
+      </div>
+      <div>
+        <label htmlFor="company" className="mb-1 block text-sm font-medium text-muted-light">
+          Virksomhed
         </label>
         <input
           type="text"
-          id="name"
-          name="name"
-          required
-          placeholder="Dit navn"
-          className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
-        />
-      </div>
-      <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium text-muted-light">
-          Email <span className="text-brand">*</span>
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          placeholder="din@email.dk"
+          id="company"
+          name="company"
+          placeholder="Dit firmanavn (valgfrit)"
           className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
         />
       </div>
@@ -632,11 +689,15 @@ function ContactForm() {
           className="w-full resize-none rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
         />
       </div>
+      {state === "error" && (
+        <p className="text-sm text-red-400">{errorMsg || "Der skete en fejl. Prøv igen eller skriv direkte til hej@tekup.dk"}</p>
+      )}
       <button
         type="submit"
-        className="w-full rounded-lg bg-brand px-6 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand"
+        disabled={state === "sending"}
+        className="w-full rounded-lg bg-brand px-6 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50"
       >
-        Send besked
+        {state === "sending" ? "Sender..." : "Send besked"}
       </button>
       <p className="text-center text-xs text-muted">
         Vi deler aldrig dine oplysninger med tredjepart.
