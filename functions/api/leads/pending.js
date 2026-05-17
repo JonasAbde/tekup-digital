@@ -62,7 +62,7 @@ async function handleGet(request, env, corsHeaders) {
     try {
       const list = await env.LEAD_STORAGE.list({ prefix: 'lead:' });
       for (const key of list.keys) {
-        const value = await env.LEAD_STORAGE.get(key);
+        const value = await env.LEAD_STORAGE.get(key.name);
         if (value) {
           leads.push({ kv_key: key.name, ...JSON.parse(value) });
         }
@@ -96,15 +96,19 @@ async function handleDelete(request, env, corsHeaders) {
       const keys = body.keys;
 
       if (keys && Array.isArray(keys)) {
-        // Delete specific keys
-        await env.LEAD_STORAGE.delete(keys);
+        // Delete specific keys one by one (KVNamespace.delete doesn't take arrays)
+        for (const key of keys) {
+          await env.LEAD_STORAGE.delete(key);
+        }
         deleted = keys.length;
       } else {
         // Delete all leads with 'lead:' prefix
         const list = await env.LEAD_STORAGE.list({ prefix: 'lead:' });
         const allKeys = list.keys.map(k => k.name);
         if (allKeys.length > 0) {
-          await env.LEAD_STORAGE.delete(allKeys);
+          for (const key of allKeys) {
+            await env.LEAD_STORAGE.delete(key);
+          }
           deleted = allKeys.length;
         }
       }
