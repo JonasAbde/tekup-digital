@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img">
+  <title>Tekko success mascot placeholder</title>
+  <defs>
+    <linearGradient id="body" x1="48" y1="36" x2="208" y2="228" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0A0A0A"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="142" r="104" fill="#10B981" opacity="0.16"/>
+  <path d="M70 105 43 34l62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M186 105 213 34l-62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M80 88c12-22 33-34 48-34s36 12 48 34c19 3 34 23 34 54 0 47-35 76-82 76s-82-29-82-76c0-31 15-51 34-54Z" fill="url(#body)" stroke="#34D399" stroke-width="5"/>
+  <path d="M92 143h18M146 143h18" stroke="#67E8F9" stroke-width="8" stroke-linecap="round"/>
+  <path d="M113 166c9 11 21 11 30 0" fill="none" stroke="#E5E7EB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M128 178 143 199h-30l15-21Z" fill="#F59E0B"/>
+  <circle cx="205" cy="190" r="28" fill="#10B981" stroke="#A7F3D0" stroke-width="6"/>
+  <path d="m193 190 8 8 17-19" fill="none" stroke="#052E16" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
