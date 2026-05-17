@@ -1,6 +1,6 @@
-# Tekko Mascot System v1
+# Tekko Mascot System v2
 
-Tekko is Tekup Digital's reusable product mascot system for assistant widgets, onboarding moments, status feedback, and future chatbot/dashboard surfaces.
+Tekko is Tekup Digital's reusable product mascot system for assistant widgets, onboarding moments, status feedback, and chatbot/dashboard surfaces.
 
 ## Identity
 
@@ -9,11 +9,10 @@ Tekko is a small cyber-fennec fox AI companion.
 Visual anchors:
 
 - oversized fennec ears
-- dark navy / charcoal body
-- electric cyan circuit accents
-- expressive blue eyes
-- warm orange accent
-- workflow/signal-path tail
+- dark navy / charcoal body (#111827)
+- emerald green outline (#10B981)
+- electric cyan eyes (#22D3EE)
+- warm amber accent (#F59E0B)
 
 The mascot must stay original to Tekup. Do not copy existing mascot systems from other companies.
 
@@ -21,15 +20,18 @@ The mascot must stay original to Tekup. Do not copy existing mascot systems from
 
 The state model lives in `src/components/tekko/tekkoStates.ts`.
 
-States:
+8 states:
 
-- `idle` — ready or neutral
-- `thinking` — gathering context
-- `working` — running or building
-- `success` — completed
-- `warning` — review needed
-- `error` — blocked or failed
-- `sleeping` — offline or inactive
+| State | Eye | Color | Use |
+|-------|-----|-------|-----|
+| `idle` | Circle | cyan #22D3EE | Default, header avatar |
+| `thinking` | Small dot | light-cyan #67E8F9 | During API calls |
+| `working` | Full solid | emerald #10B981 | Processing data |
+| `success` | Crescent | green #34D399 | Operation complete |
+| `warning` | Triangle/exclamation | amber #F59E0B | Rate limits, notices |
+| `error` | X shape | red #EF4444 | API failure |
+| `sleeping` | Horizontal line | mint #6EE7B7 | Idle timeout |
+| `connecting` | One blinking | cyan #22D3EE | Reconnecting |
 
 ## Components
 
@@ -90,8 +92,9 @@ Use Tekko for helpful product moments: onboarding, assistant status, empty state
 
 ## Next steps
 
-1. Replace placeholder SVGs with final transparent assets.
-2. Add Tekko to the landing page hero or trust section.
-3. Add Tekko to contact success feedback.
-4. Extend the same state model to chatbot and agent dashboard surfaces.
-5. Add animation later through Lottie or spritesheets after static assets are stable.
+- [x] Replace placeholder SVGs with final transparent assets.
+- [x] Add connecting state.
+- [ ] Add Tekko to the landing page hero or trust section.
+- [ ] Add Tekko to contact success feedback.
+- [ ] Extend the same state model to chatbot and agent dashboard surfaces.
+- [ ] Add animation through Lottie or spritesheets after static assets are stable.
