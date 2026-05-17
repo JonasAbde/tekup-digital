@@ -1,6 +1,6 @@
-# Tekko Mascot System v2
+# Tekko Mascot System
 
-Tekko is Tekup Digital's reusable product mascot system for assistant widgets, onboarding moments, status feedback, and chatbot/dashboard surfaces.
+Tekko is Tekup Digital's reusable product mascot system for assistant widgets, onboarding moments, status feedback, chatbot surfaces, and dashboards.
 
 ## Identity
 
@@ -9,10 +9,11 @@ Tekko is a small cyber-fennec fox AI companion.
 Visual anchors:
 
 - oversized fennec ears
-- dark navy / charcoal body (#111827)
-- emerald green outline (#10B981)
-- electric cyan eyes (#22D3EE)
-- warm amber accent (#F59E0B)
+- dark navy / charcoal body
+- electric cyan eyes
+- cyan circuit-line details
+- warm amber / orange accent
+- workflow / signal-path tail
 
 The mascot must stay original to Tekup. Do not copy existing mascot systems from other companies.
 
@@ -20,22 +21,18 @@ The mascot must stay original to Tekup. Do not copy existing mascot systems from
 
 The state model lives in `src/components/tekko/tekkoStates.ts`.
 
-8 states:
+States:
 
-| State | Eye | Color | Use |
-|-------|-----|-------|-----|
-| `idle` | Circle | cyan #22D3EE | Default, header avatar |
-| `thinking` | Small dot | light-cyan #67E8F9 | During API calls |
-| `working` | Full solid | emerald #10B981 | Processing data |
-| `success` | Crescent | green #34D399 | Operation complete |
-| `warning` | Triangle/exclamation | amber #F59E0B | Rate limits, notices |
-| `error` | X shape | red #EF4444 | API failure |
-| `sleeping` | Horizontal line | mint #6EE7B7 | Idle timeout |
-| `connecting` | One blinking | cyan #22D3EE | Reconnecting |
+- `idle`
+- `thinking`
+- `working`
+- `success`
+- `warning`
+- `error`
+- `sleeping`
+- `connecting`
 
 ## Components
-
-Current v1 files:
 
 ```txt
 src/components/tekko/tekkoStates.ts
@@ -53,23 +50,23 @@ Example usage:
 ```tsx
 <TekkoMascot state="thinking" size="md" animated />
 
-<TekkoAssistantWidget
-  state="working"
-  title="Tekko is analyzing your workflow..."
-  message="I’m gathering the right context."
-  progress={72}
-/>
-
-<TekkoToast
-  state="success"
-  title="Automation klar"
-  message="3 opgaver blev gennemført."
-/>
+<TekkoMascot state="idle" size="lg" preferProductionAsset={false} />
 ```
 
-## Asset contract
+## Asset pipeline
 
-Production assets should be placed in `public/tekko/` using this naming convention:
+`TekkoMascot` prefers final production assets, then falls back safely:
+
+```txt
+1. /tekko/tekko-{state}.webp
+2. /tekko/tekko-{state}.png
+3. /tekko/tekko-{state}.svg
+4. text fallback
+```
+
+This lets us ship the component system now, keep lightweight SVGs, and drop in reference-quality PNG/WebP assets later without changing the public component API.
+
+## Required fallback SVGs
 
 ```txt
 tekko-idle.svg
@@ -79,23 +76,68 @@ tekko-success.svg
 tekko-warning.svg
 tekko-error.svg
 tekko-sleeping.svg
-tekko-avatar.svg
-tekko-badge.svg
+tekko-connecting.svg
+```
+
+## Production exports
+
+Final reference-quality assets should be exported as:
+
+```txt
+tekko-idle.webp
+tekko-thinking.webp
+tekko-working.webp
+tekko-success.webp
+tekko-warning.webp
+tekko-error.webp
+tekko-sleeping.webp
+tekko-connecting.webp
+
+tekko-idle.png
+tekko-thinking.png
+tekko-working.png
+tekko-success.png
+tekko-warning.png
+tekko-error.png
+tekko-sleeping.png
+tekko-connecting.png
+```
+
+Optional brand assets:
+
+```txt
+tekko-avatar.png
+tekko-badge.png
 tekko-app-icon.png
 ```
 
-`TekkoMascot` includes fallback rendering so missing assets do not break the UI.
-
 ## Usage rules
 
-Use Tekko for helpful product moments: onboarding, assistant status, empty states, success states, and clear feedback. Avoid using Tekko inside dense data views or as decoration with no purpose.
+Use Tekko for helpful product moments: onboarding, assistant status, empty states, success states, and clear feedback.
+
+Do not use Tekko inside dense data views or as decoration with no purpose.
+
+## Verification
+
+Run:
+
+```bash
+npm run lint
+npm run build
+```
+
+After the Tekko verification script lands, also run:
+
+```bash
+npm run verify:tekko
+```
 
 ## Next steps
 
-- [x] Replace placeholder SVGs with final transparent assets.
-- [x] Add connecting state.
-- [x] Add Tekko to the landing page hero or trust section.
-- [x] Add Tekko to contact success feedback.
-- [x] Add Tekko to Agent Dashboard header.
-- [ ] Extend the same state model to chatbot backend responses.
-- [ ] Add animation through Lottie or spritesheets after static assets are stable.
+- [x] Add state-based mascot system.
+- [x] Add SVG fallback assets.
+- [x] Add Tekko to landing and widget surfaces.
+- [x] Add production asset source contract.
+- [ ] Export reference-quality PNG/WebP assets.
+- [ ] Update verification to require production assets once they exist.
+- [ ] Add Lottie or spritesheet animation after static assets are stable.
