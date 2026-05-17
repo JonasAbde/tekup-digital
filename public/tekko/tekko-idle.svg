@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Tekko idle mascot placeholder</title>
+  <desc id="desc">A simple placeholder icon for Tekko, Tekup's AI mascot.</desc>
+  <defs>
+    <linearGradient id="body" x1="48" y1="36" x2="208" y2="228" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(128 142) rotate(90) scale(104)">
+      <stop stop-color="#10B981" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="142" r="104" fill="url(#glow)"/>
+  <path d="M70 105 43 34l62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M186 105 213 34l-62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M80 88c12-22 33-34 48-34s36 12 48 34c19 3 34 23 34 54 0 47-35 76-82 76s-82-29-82-76c0-31 15-51 34-54Z" fill="url(#body)" stroke="#34D399" stroke-width="5"/>
+  <path d="M88 123c12 0 20 8 20 18M168 123c-12 0-20 8-20 18" fill="none" stroke="#E5E7EB" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="101" cy="145" r="9" fill="#67E8F9"/>
+  <circle cx="155" cy="145" r="9" fill="#67E8F9"/>
+  <path d="M118 164c5 5 15 5 20 0" fill="none" stroke="#E5E7EB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M128 178 143 199h-30l15-21Z" fill="#F59E0B"/>
+  <path d="M205 173c24 10 28 36 5 48-20 11-46-3-44-27 3-31 57-10 37 19" fill="none" stroke="#34D399" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="207" cy="173" r="7" fill="#F59E0B"/>
+  <path d="M83 110h24M149 110h24M128 86v18" stroke="#10B981" stroke-width="5" stroke-linecap="round"/>
+</svg>
