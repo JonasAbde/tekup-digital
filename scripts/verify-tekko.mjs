@@ -29,6 +29,16 @@ const requiredStates = [
 ];
 
 const requiredSvgAssets = requiredStates.map((state) => `public/tekko/tekko-${state}.svg`);
+const requiredPngAssets = requiredStates.map((state) => `public/tekko/tekko-${state}.png`);
+const requiredWebpAssets = requiredStates.map((state) => `public/tekko/tekko-${state}.webp`);
+const requiredExtraAssets = [
+  "public/tekko/tekko-avatar.png",
+  "public/tekko/tekko-avatar.webp",
+  "public/tekko/tekko-badge.png",
+  "public/tekko/tekko-badge.webp",
+  "public/tekko/tekko-app-icon.png",
+  "public/tekko/tekko-app-icon.webp",
+];
 const failures = [];
 
 function check(condition, message) {
@@ -39,7 +49,7 @@ function read(path) {
   return readFileSync(join(root, path), "utf8");
 }
 
-for (const file of [...requiredFiles, ...requiredSvgAssets]) {
+for (const file of [...requiredFiles, ...requiredSvgAssets, ...requiredPngAssets, ...requiredWebpAssets, ...requiredExtraAssets]) {
   check(existsSync(join(root, file)), `Missing required Tekko file: ${file}`);
 }
 
@@ -49,9 +59,9 @@ if (existsSync(join(root, "src/components/tekko/tekkoStates.ts"))) {
   check(stateSource.includes("createTekkoAsset"), "tekkoStates.ts does not centralize Tekko asset creation");
   for (const state of requiredStates) {
     check(stateSource.includes(`"${state}"`), `tekkoStates.ts does not include state: ${state}`);
-    check(stateSource.includes(`/tekko/tekko-${state}.webp`), `tekkoStates.ts does not define WebP source for state: ${state}`);
-    check(stateSource.includes(`/tekko/tekko-${state}.png`), `tekkoStates.ts does not define PNG source for state: ${state}`);
-    check(stateSource.includes(`/tekko/tekko-${state}.svg`), `tekkoStates.ts does not define SVG fallback for state: ${state}`);
+    check(stateSource.includes("tekko-${state}.webp"), `tekkoStates.ts does not define WebP source template`);
+    check(stateSource.includes("tekko-${state}.png"), `tekkoStates.ts does not define PNG source template`);
+    check(stateSource.includes("tekko-${state}.svg"), `tekkoStates.ts does not define SVG fallback template`);
   }
 }
 
@@ -108,4 +118,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, production asset source contract, preview lab, landing integration, widget asset pipeline, and widget embed are present.`);
+console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, PNG + WebP production assets, bonus assets, preview lab, landing integration, widget asset pipeline, and widget embed are present.`);
