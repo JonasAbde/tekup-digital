@@ -11,6 +11,7 @@ const requiredFiles = [
   "src/components/tekko/TekkoStatusCard.tsx",
   "src/components/tekko/TekkoToast.tsx",
   "src/components/tekko/index.ts",
+  "src/app/tekko/page.tsx",
   "public/tekko-widget.js",
   "docs/TEKKO_MASCOT_SYSTEM.md",
   "docs/TEKKO_IMPLEMENTATION_AUDIT.md",
@@ -70,6 +71,17 @@ if (existsSync(join(root, "src/app/page.tsx"))) {
   check(page.includes('state="success"'), "Landing page does not use Tekko success state");
 }
 
+if (existsSync(join(root, "src/app/tekko/page.tsx"))) {
+  const preview = read("src/app/tekko/page.tsx");
+  check(preview.includes("Tekko Mascot Preview Lab"), "Tekko preview lab title is missing");
+  check(preview.includes("preferProductionAsset={false}"), "Tekko preview lab does not show SVG fallback mode");
+  check(preview.includes("TekkoAssistantWidget"), "Tekko preview lab does not render assistant widget surface");
+  check(preview.includes("TekkoEmptyState"), "Tekko preview lab does not render empty state surface");
+  for (const state of requiredStates) {
+    check(preview.includes(`"${state}"`), `Tekko preview lab does not include state: ${state}`);
+  }
+}
+
 if (existsSync(join(root, "src/app/layout.tsx"))) {
   const layout = read("src/app/layout.tsx");
   check(layout.includes("/tekko-widget.js"), "Root layout does not load the Tekko widget script");
@@ -91,4 +103,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, production asset source contract, landing integration, and widget embed are present.`);
+console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, production asset source contract, preview lab, landing integration, and widget embed are present.`);
