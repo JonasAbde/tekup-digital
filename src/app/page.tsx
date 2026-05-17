@@ -185,8 +185,8 @@ function RevealSection({ children, className = "" }: { children: React.ReactNode
     // Check prefers-reduced-motion
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
-      setVisible(true);
-      return;
+      const frame = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(frame);
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -316,7 +316,7 @@ export default function HomePage() {
             />
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {services.map((service, i) => (
+              {services.map((service) => (
                 <div
                   key={service.id}
                   id={service.id}

@@ -61,7 +61,7 @@ export default function PrivatlivPage() {
             <ul className="mt-2 list-disc pl-5 space-y-1">
               <li>Ret til indsigt i de oplysninger vi behandler om dig</li>
               <li>Ret til berigtigelse af urigtige oplysninger</li>
-              <li>Ret til sletning ("retten til at blive glemt")</li>
+              <li>Ret til sletning (&quot;retten til at blive glemt&quot;)</li>
               <li>Ret til begrænsning af behandling</li>
               <li>Ret til dataportabilitet</li>
               <li>Ret til at trække samtykke tilbage</li>

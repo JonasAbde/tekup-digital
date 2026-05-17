@@ -7,10 +7,6 @@
  * Authentication: ?secret=SYNC_SECRET (from env.SYNC_SECRET or default)
  */
 
-// In-memory queue (shared with lead.js via module scope)
-// This is a separate deployment, so it won't share memory with lead.js
-const localQueue = [];
-
 // Default secret for local sync — change in Cloudflare Pages env
 const DEFAULT_SECRET = 'tkp-sync-8f3a';
 
@@ -67,7 +63,7 @@ async function handleGet(request, env, corsHeaders) {
           leads.push({ kv_key: key.name, ...JSON.parse(value) });
         }
       }
-    } catch (err) {
+    } catch {
       // KV unavailable
     }
   }
@@ -112,7 +108,7 @@ async function handleDelete(request, env, corsHeaders) {
           deleted = allKeys.length;
         }
       }
-    } catch (err) {
+    } catch {
       // Delete failed
     }
   }

@@ -103,7 +103,7 @@ export async function onRequest(context) {
       { status: 201, headers: { 'Content-Type': 'application/json', ...corsHeaders } },
     );
 
-  } catch (err) {
+  } catch {
     // Catch-all — never expose backend failures to the user
     return new Response(
       JSON.stringify({

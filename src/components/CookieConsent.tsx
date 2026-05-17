@@ -7,7 +7,10 @@ export default function CookieConsent() {
 
   useEffect(() => {
     const consent = localStorage.getItem("tekup-cookie-consent");
-    if (!consent) setVisible(true);
+    if (!consent) {
+      const frame = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(frame);
+    }
   }, []);
 
   const accept = () => {
