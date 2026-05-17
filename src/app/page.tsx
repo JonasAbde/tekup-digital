@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
+import { TekkoAssistantWidget, TekkoMascot } from "@/components/tekko";
 
 /* ============================================
    DATA
@@ -182,23 +183,46 @@ function RevealSection({ children, className = "" }: { children: React.ReactNode
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    const reveal = () => setVisible(true);
+    const hasHashTarget = () => {
+      const targetId = window.location.hash.slice(1);
+      return Boolean(targetId && el.querySelector(`#${CSS.escape(targetId)}`));
+    };
+
+    const revealOnHashTarget = () => {
+      if (!hasHashTarget()) return undefined;
+      const frame = requestAnimationFrame(reveal);
+      return () => cancelAnimationFrame(frame);
+    };
+
+    const cleanupHashReveal = revealOnHashTarget();
+    if (cleanupHashReveal) return cleanupHashReveal;
+
     // Check prefers-reduced-motion
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
-      const frame = requestAnimationFrame(() => setVisible(true));
+      const frame = requestAnimationFrame(reveal);
       return () => cancelAnimationFrame(frame);
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
+          reveal();
           observer.disconnect();
         }
       },
       { threshold: 0.1 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    const onHashChange = () => {
+      if (hasHashTarget()) reveal();
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("hashchange", onHashChange);
+    };
   }, []);
 
   return (
@@ -276,8 +300,21 @@ export default function HomePage() {
             </Link>
           </div>
 
+          <div className="animate-fade-in-up stagger-5 mx-auto mt-10 max-w-xl text-left">
+            <TekkoAssistantWidget
+              state="idle"
+              title="Tekko holder styr på næste skridt"
+              message="Start med ydelserne eller book en gratis samtale, så hjælper vi med at finde den enkleste AI-løsning først."
+              progress={35}
+              actions={[
+                { label: "Se agentpakker", href: "#ydelser" },
+                { label: "Kontakt os", href: "#kontakt" },
+              ]}
+            />
+          </div>
+
           {/* Trust indicators */}
-          <div className="animate-fade-in-up stagger-5 mx-auto mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs text-muted">
+          <div className="animate-fade-in-up stagger-5 mx-auto mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs text-muted">
             <span className="flex items-center gap-1.5">
               <svg className="h-4 w-4 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -507,6 +544,16 @@ export default function HomePage() {
                   <p className="text-xs text-muted">
                     Vi svarer typisk inden for 2 timer i hverdagene.
                   </p>
+
+                  <div className="flex items-center gap-4 border-t border-border pt-6">
+                    <TekkoMascot state="idle" size="md" animated={false} />
+                    <div>
+                      <p className="text-sm font-semibold text-white">Tekko læser med på behovet.</p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-light">
+                        Skriv bare kort. Vi omsætter det til næste praktiske skridt.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Contact form */}
@@ -607,12 +654,10 @@ function ContactForm() {
   if (state === "sent") {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-brand/20 bg-brand/5 px-6 py-12 text-center">
-        <svg className="h-12 w-12 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        <TekkoMascot state="idle" size="lg" animated={false} />
         <h3 className="mt-4 text-lg font-bold text-white">Tak for din henvendelse!</h3>
         <p className="mt-2 text-sm text-muted-light">
-          Vi vender tilbage inden for 24 timer — typisk meget hurtigere.
+          Tekko har sendt beskeden videre. Vi vender tilbage inden for 24 timer — typisk meget hurtigere.
         </p>
       </div>
     );
