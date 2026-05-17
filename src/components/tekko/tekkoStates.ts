@@ -5,7 +5,8 @@ export type TekkoState =
   | "success"
   | "warning"
   | "error"
-  | "sleeping";
+  | "sleeping"
+  | "connecting";
 
 export type TekkoSize = "sm" | "md" | "lg" | "xl";
 
@@ -59,6 +60,12 @@ export const tekkoAssets: Record<TekkoState, TekkoAsset> = {
     label: "Sleeping",
     message: "Offline or inactive.",
   },
+  connecting: {
+    src: "/tekko/tekko-connecting.svg",
+    alt: "Tekko connecting or re-establishing connection",
+    label: "Connecting",
+    message: "Establishing connection...",
+  },
 };
 
 export const tekkoSizeClasses: Record<TekkoSize, string> = {
@@ -76,6 +83,7 @@ export const tekkoStateStyles: Record<TekkoState, string> = {
   warning: "border-accent/30 bg-accent/10 text-accent",
   error: "border-red-400/30 bg-red-500/10 text-red-200",
   sleeping: "border-white/10 bg-white/5 text-muted-light",
+  connecting: "border-cyan-400/25 bg-cyan-400/10 text-cyan-200",
 };
 
 export function getTekkoAsset(state: TekkoState = "idle") {

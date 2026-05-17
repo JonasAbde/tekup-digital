@@ -1,18 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img">
-  <title>Tekko success mascot placeholder</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="body" x1="48" y1="36" x2="208" y2="228" gradientUnits="userSpaceOnUse">
+    <radialGradient id="glowBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="faceGrad" x1="48" y1="36" x2="208" y2="228">
       <stop stop-color="#111827"/>
-      <stop offset="1" stop-color="#0A0A0A"/>
+      <stop offset="1" stop-color="#0f0f0f"/>
     </linearGradient>
   </defs>
-  <circle cx="128" cy="142" r="104" fill="#10B981" opacity="0.16"/>
-  <path d="M70 105 43 34l62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M186 105 213 34l-62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M80 88c12-22 33-34 48-34s36 12 48 34c19 3 34 23 34 54 0 47-35 76-82 76s-82-29-82-76c0-31 15-51 34-54Z" fill="url(#body)" stroke="#34D399" stroke-width="5"/>
-  <path d="M92 143h18M146 143h18" stroke="#67E8F9" stroke-width="8" stroke-linecap="round"/>
-  <path d="M113 166c9 11 21 11 30 0" fill="none" stroke="#E5E7EB" stroke-width="6" stroke-linecap="round"/>
-  <path d="M128 178 143 199h-30l15-21Z" fill="#F59E0B"/>
-  <circle cx="205" cy="190" r="28" fill="#10B981" stroke="#A7F3D0" stroke-width="6"/>
-  <path d="m193 190 8 8 17-19" fill="none" stroke="#052E16" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="128" cy="140" rx="100" ry="100" fill="url(#glowBg)"/>
+  <!-- Left ear -->
+  <path d="M72 105 45 34l62 47" fill="#111827" stroke="#34D399" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M72 105 55 55l44 38" fill="#FBBF24" opacity="0.15"/>
+  <!-- Right ear -->
+  <path d="M184 105 211 34l-62 47" fill="#111827" stroke="#34D399" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M184 105 201 55l-44 38" fill="#FBBF24" opacity="0.15"/>
+  <!-- Face -->
+  <path d="M78 88c12-22 33-34 50-34s38 12 50 34c18 4 34 24 34 56 0 48-36 78-84 78s-84-30-84-78c0-32 16-52 34-56Z" fill="url(#faceGrad)" stroke="#34D399" stroke-width="4"/>
+  <!-- Check glows - golden -->
+  <ellipse cx="90" cy="155" rx="18" ry="12" fill="#FBBF24" opacity="0.08"/>
+  <ellipse cx="166" cy="155" rx="18" ry="12" fill="#FBBF24" opacity="0.08"/>
+  <!-- Eyes - crescent/smile shape -->
+  <path d="M94 148c3-5 10-5 13 0" fill="none" stroke="#34D399" stroke-width="5" stroke-linecap="round"/>
+  <path d="M149 148c3-5 10-5 13 0" fill="none" stroke="#34D399" stroke-width="5" stroke-linecap="round"/>
+  <!-- Smile -->
+  <path d="M119 166c4 4 14 4 18 0" fill="none" stroke="#A7F3D0" stroke-width="4" stroke-linecap="round"/>
+  <!-- Sparkle -->
+  <circle cx="128" cy="185" r="3" fill="#FBBF24" opacity="0.6">
+    <animate attributeName="r" values="3;5;3" dur="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="1s" repeatCount="indefinite"/>
+  </circle>
 </svg>

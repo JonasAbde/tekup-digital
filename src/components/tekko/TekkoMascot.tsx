@@ -20,6 +20,7 @@ const stateMotion: Record<TekkoState, string> = {
   warning: "motion-safe:animate-tekko-think",
   error: "",
   sleeping: "",
+  connecting: "motion-safe:animate-tekko-connect",
 };
 
 export function TekkoMascot({

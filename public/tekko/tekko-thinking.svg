@@ -1,20 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img">
-  <title>Tekko thinking mascot placeholder</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="body" x1="48" y1="36" x2="208" y2="228" gradientUnits="userSpaceOnUse">
+    <radialGradient id="glowBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="faceGrad" x1="48" y1="36" x2="208" y2="228">
       <stop stop-color="#111827"/>
-      <stop offset="1" stop-color="#0A0A0A"/>
+      <stop offset="1" stop-color="#0f0f0f"/>
     </linearGradient>
   </defs>
-  <circle cx="128" cy="142" r="104" fill="#22D3EE" opacity="0.12"/>
-  <path d="M70 105 43 34l62 45" fill="#101827" stroke="#22D3EE" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M186 105 213 34l-62 45" fill="#101827" stroke="#22D3EE" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M80 88c12-22 33-34 48-34s36 12 48 34c19 3 34 23 34 54 0 47-35 76-82 76s-82-29-82-76c0-31 15-51 34-54Z" fill="url(#body)" stroke="#22D3EE" stroke-width="5"/>
-  <circle cx="101" cy="145" r="9" fill="#67E8F9"/>
-  <circle cx="155" cy="145" r="9" fill="#67E8F9"/>
-  <path d="M116 166c8-4 16-4 24 0" fill="none" stroke="#E5E7EB" stroke-width="6" stroke-linecap="round"/>
-  <path d="M128 178 143 199h-30l15-21Z" fill="#F59E0B"/>
-  <circle cx="198" cy="55" r="10" fill="#22D3EE"/>
-  <circle cx="218" cy="35" r="6" fill="#F59E0B"/>
-  <path d="M198 73v21M185 84h26" stroke="#22D3EE" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="128" cy="140" rx="100" ry="100" fill="url(#glowBg)"/>
+  <!-- Left ear -->
+  <path d="M72 105 45 34l62 47" fill="#111827" stroke="#22D3EE" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M72 105 55 55l44 38" fill="#22D3EE" opacity="0.15"/>
+  <!-- Right ear -->
+  <path d="M184 105 211 34l-62 47" fill="#111827" stroke="#22D3EE" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M184 105 201 55l-44 38" fill="#22D3EE" opacity="0.15"/>
+  <!-- Face -->
+  <path d="M78 88c12-22 33-34 50-34s38 12 50 34c18 4 34 24 34 56 0 48-36 78-84 78s-84-30-84-78c0-32 16-52 34-56Z" fill="url(#faceGrad)" stroke="#22D3EE" stroke-width="4"/>
+  <!-- Cheek glows -->
+  <ellipse cx="90" cy="155" rx="18" ry="12" fill="#22D3EE" opacity="0.05"/>
+  <ellipse cx="166" cy="155" rx="18" ry="12" fill="#22D3EE" opacity="0.05"/>
+  <!-- Eyes - small dots looking up -->
+  <circle cx="104" cy="144" r="6" fill="#67E8F9"/>
+  <circle cx="152" cy="144" r="6" fill="#67E8F9"/>
+  <!-- Thinking particles -->
+  <circle cx="195" cy="50" r="6" fill="#22D3EE" opacity="0.7">
+    <animate attributeName="cy" values="50;42;50" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;0.2;0.7" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="215" cy="38" r="4" fill="#10B981" opacity="0.5">
+    <animate attributeName="cy" values="38;30;38" dur="1.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0.1;0.5" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="205" cy="68" r="3" fill="#67E8F9" opacity="0.3">
+    <animate attributeName="cy" values="68;60;68" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <!-- Smile -->
+  <path d="M120 168c3 3 13 3 16 0" fill="none" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
 </svg>
