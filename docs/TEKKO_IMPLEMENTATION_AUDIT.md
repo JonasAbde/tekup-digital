@@ -34,16 +34,21 @@ Confirmed stack:
 
 Conclusion: `tekup-digital` is the correct first implementation target for Tekko UI components and landing integration.
 
-## Current implementation decision
+## Current implementation status
 
-This PR starts Tekko in `tekup-digital` as a reusable component system without wiring it aggressively into the landing page yet.
+All items from the recommended next PR (below) are now complete:
 
-Reason:
+1. ✅ Final transparent assets added to `public/tekko/`
+2. ✅ Tekko components imported into `src/app/page.tsx`
+3. ✅ Tekko assistant card in hero (TekkoAssistantWidget)
+4. ✅ TekkoToast / success state on contact form
+5. ✅ TekkoEmptyState added where applicable
 
-- The existing landing page is a single large client component.
-- A safe first PR should establish the state model, component API, docs, and asset contract.
-- Final production art assets are not yet available as separate transparent state exports.
-- The component system includes fallback rendering so missing assets do not break the UI.
+Tekko is now live across:
+- `tekup.dk` — React components in hero, contact, success state
+- Widget — inline SVG on chat button via tekko-widget.js
+- Agent Dashboard (:8010) — header avatar via FastAPI static mount
+- Local demo page (:8040/tekko) — 8 states with live controller
 
 ## Recommended next PR
 
