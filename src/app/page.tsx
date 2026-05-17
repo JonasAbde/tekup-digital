@@ -788,8 +788,25 @@ function ContactForm() {
         />
       </div>
       {state === "error" && (
-        <p className="text-sm text-red-400">{errorMsg || "Der skete en fejl. Prøv igen eller skriv direkte til hej@tekup.dk"}</p>
+        <div className="flex items-center gap-3 rounded-xl border border-red-400/20 bg-red-500/5 px-4 py-3">
+          <TekkoMascot state="error" size="sm" showGlow={false} />
+          <div>
+            <p className="text-sm font-semibold text-red-200">Beskeden kunne ikke sendes</p>
+            <p className="text-xs text-red-300/70">{errorMsg || "Der skete en fejl. Prøv igen eller skriv direkte til hej@tekup.dk"}</p>
+          </div>
+        </div>
       )}
+
+      {state === "sending" && (
+        <div className="flex items-center gap-3 rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-3">
+          <TekkoMascot state="working" size="sm" showGlow={false} />
+          <div>
+            <p className="text-sm font-semibold text-white">Tekko sender beskeden...</p>
+            <p className="text-xs text-muted-light">Beskeden krypteres og sendes sikkert til teamet.</p>
+          </div>
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={state === "sending"}

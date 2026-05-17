@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "verify:tekko": "node scripts/verify-tekko.mjs"
+    "verify:tekko": "node scripts/verify-tekko.mjs",
+    "generate:og": "node scripts/generate-og-image.mjs"
   },
   "dependencies": {
     "next": "16.2.6",
