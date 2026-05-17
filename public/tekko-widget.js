@@ -1,6 +1,6 @@
 /**
  * Tekko Chat Widget — Vanilla JS embed
- * 
+ *
  * Embed på din hjemmeside:
  * <script src="https://tekup-chatbot-widget.pages.dev/tekko-widget.js"></script>
  * <script>TekkoWidget.init({ apiUrl: "https://chat.tekup.dk" })</script>
@@ -20,7 +20,7 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     #tekko-widget-button:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5); }
-    #tekko-widget-button svg { width: 28px; height: 28px; }
+    #tekko-widget-button svg { width: 34px; height: 34px; position: relative; z-index: 1; }
     #tekko-widget-button .pulse {
       position: absolute; width: 100%; height: 100%; border-radius: 50%;
       background: #10b981; opacity: 0.3; animation: tekko-pulse 2s infinite;
@@ -95,21 +95,8 @@
     .tekko-send svg { width: 16px; height: 16px; fill: white; }
   `;
 
-  // Tekko SVG icon (cyber-fennec fox)
-  const TEKKO_IDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-    <defs><radialGradient id="tg"><stop offset="0%" stop-color="#10B981" stop-opacity="0.10"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></radialGradient><linearGradient id="tf" x1="48" y1="36" x2="208" y2="228"><stop stop-color="#111827"/><stop offset="1" stop-color="#0f0f0f"/></linearGradient></defs>
-    <ellipse cx="128" cy="140" rx="100" ry="100" fill="url(#tg)"/>
-    <path d="M72 105 45 34l62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M72 105 55 55l44 38" fill="#10B981" opacity="0.15"/>
-    <path d="M184 105 211 34l-62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M184 105 201 55l-44 38" fill="#10B981" opacity="0.15"/>
-    <path d="M78 88c12-22 33-34 50-34s38 12 50 34c18 4 34 24 34 56 0 48-36 78-84 78s-84-30-84-78c0-32 16-52 34-56Z" fill="url(#tf)" stroke="#10B981" stroke-width="4"/>
-    <circle cx="104" cy="148" r="10" fill="#22D3EE"/>
-    <circle cx="152" cy="148" r="10" fill="#22D3EE"/>
-    <circle cx="100" cy="144" r="3" fill="#ffffff" opacity="0.5"/>
-    <circle cx="148" cy="144" r="3" fill="#ffffff" opacity="0.5"/>
-    <path d="M119 166c4 4 14 4 18 0" fill="none" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
-  </svg>`;
+  // Tekko SVG icon v3: semi-full-body cyber-fennec with workflow tail and orange accent.
+  const TEKKO_IDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><radialGradient id="g" cx="50%" cy="52%" r="55%"><stop offset="0%" stop-color="#10B981" stop-opacity=".18"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></radialGradient><linearGradient id="b" x1="52" y1="38" x2="205" y2="226"><stop stop-color="#111827"/><stop offset="1" stop-color="#0B0F19"/></linearGradient></defs><ellipse cx="128" cy="142" rx="108" ry="102" fill="url(#g)"/><path d="M174 171c29-7 52 14 41 37-11 23-54 18-49-9 4-22 39-10 27 7" fill="none" stroke="#10B981" stroke-width="8" stroke-linecap="round"/><circle cx="179" cy="171" r="5" fill="#22D3EE"/><circle cx="207" cy="187" r="5" fill="#F59E0B"/><circle cx="192" cy="210" r="4" fill="#22D3EE"/><path d="M73 106 45 34l62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/><path d="M183 106 211 34l-62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/><path d="M70 103 57 57l39 35M186 103 199 57l-39 35" fill="#22D3EE" opacity=".16"/><path d="M92 148c8-14 23-22 36-22s28 8 36 22c17 8 25 24 25 45 0 29-25 45-61 45s-61-16-61-45c0-21 8-37 25-45Z" fill="url(#b)" stroke="#10B981" stroke-width="4"/><path d="M79 88c12-22 33-34 49-34s37 12 49 34c18 4 34 24 34 55 0 47-35 76-83 76s-83-29-83-76c0-31 16-51 34-55Z" fill="url(#b)" stroke="#10B981" stroke-width="4"/><path d="M89 119h22m34 0h22M128 91v18M101 187h54" stroke="#22D3EE" stroke-width="3" stroke-linecap="round" opacity=".7"/><circle cx="104" cy="148" r="10" fill="#22D3EE"/><circle cx="152" cy="148" r="10" fill="#22D3EE"/><circle cx="100" cy="144" r="3" fill="#fff" opacity=".55"/><circle cx="148" cy="144" r="3" fill="#fff" opacity=".55"/><path d="M119 166c4 4 14 4 18 0" fill="none" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/><path d="M128 181l15 21h-30l15-21Z" fill="#F59E0B" stroke="#FBBF24" stroke-width="2"/><path d="M96 232h22m20 0h22" stroke="#334155" stroke-width="8" stroke-linecap="round"/></svg>`;
 
   const CLOSE_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
   const SEND_ICON = `<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`;
