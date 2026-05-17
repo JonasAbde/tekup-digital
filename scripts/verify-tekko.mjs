@@ -27,7 +27,7 @@ const requiredStates = [
   "connecting",
 ];
 
-const requiredAssets = requiredStates.map((state) => `public/tekko/tekko-${state}.svg`);
+const requiredSvgAssets = requiredStates.map((state) => `public/tekko/tekko-${state}.svg`);
 const failures = [];
 
 function check(condition, message) {
@@ -38,16 +38,29 @@ function read(path) {
   return readFileSync(join(root, path), "utf8");
 }
 
-for (const file of [...requiredFiles, ...requiredAssets]) {
+for (const file of [...requiredFiles, ...requiredSvgAssets]) {
   check(existsSync(join(root, file)), `Missing required Tekko file: ${file}`);
 }
 
 if (existsSync(join(root, "src/components/tekko/tekkoStates.ts"))) {
   const stateSource = read("src/components/tekko/tekkoStates.ts");
+  check(stateSource.includes("TekkoAssetSources"), "tekkoStates.ts does not define TekkoAssetSources");
+  check(stateSource.includes("createTekkoAsset"), "tekkoStates.ts does not centralize Tekko asset creation");
   for (const state of requiredStates) {
     check(stateSource.includes(`"${state}"`), `tekkoStates.ts does not include state: ${state}`);
-    check(stateSource.includes(`/tekko/tekko-${state}.svg`), `tekkoStates.ts does not reference asset for state: ${state}`);
+    check(stateSource.includes(`/tekko/tekko-${state}.webp`), `tekkoStates.ts does not define WebP source for state: ${state}`);
+    check(stateSource.includes(`/tekko/tekko-${state}.png`), `tekkoStates.ts does not define PNG source for state: ${state}`);
+    check(stateSource.includes(`/tekko/tekko-${state}.svg`), `tekkoStates.ts does not define SVG fallback for state: ${state}`);
   }
+}
+
+if (existsSync(join(root, "src/components/tekko/TekkoMascot.tsx"))) {
+  const mascot = read("src/components/tekko/TekkoMascot.tsx");
+  check(mascot.includes("preferProductionAsset"), "TekkoMascot does not expose preferProductionAsset");
+  check(mascot.includes("asset.sources.webp"), "TekkoMascot does not try WebP production assets");
+  check(mascot.includes("asset.sources.png"), "TekkoMascot does not try PNG production assets");
+  check(mascot.includes("asset.sources.svg"), "TekkoMascot does not keep SVG fallback");
+  check(mascot.includes("setSourceIndex"), "TekkoMascot does not step through fallback sources");
 }
 
 if (existsSync(join(root, "src/app/page.tsx"))) {
@@ -78,4 +91,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Tekko verification passed: ${requiredStates.length} states, ${requiredAssets.length} assets, landing integration, and widget embed are present.`);
+console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, production asset source contract, landing integration, and widget embed are present.`);
