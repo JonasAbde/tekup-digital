@@ -633,7 +633,7 @@ function ContactForm() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("https://tekup-chat-worker.empire1266.workers.dev/api/lead", {
+      const res = await fetch("https://chat.tekup.dk/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message, service, company }),

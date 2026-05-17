@@ -3,7 +3,7 @@
  * 
  * Embed på din hjemmeside:
  * <script src="https://tekup-chatbot-widget.pages.dev/tekko-widget.js"></script>
- * <script>TekkoWidget.init({ apiUrl: "https://tekup-chat-worker.empire1266.workers.dev" })</script>
+ * <script>TekkoWidget.init({ apiUrl: "https://chat.tekup.dk" })</script>
  */
 
 (function () {
@@ -250,7 +250,7 @@
   window.TekkoWidget = {
     init: function (opts) {
       config = {
-        apiUrl: opts.apiUrl || 'https://tekup-chat-worker.empire1266.workers.dev',
+        apiUrl: opts.apiUrl || 'https://chat.tekup.dk',
         greeting: opts.greeting || 'Hej! 👋 Hvordan kan jeg hjælpe dig i dag?',
         subtitle: opts.subtitle || 'Spørg om vores løsninger',
         primaryColor: opts.primaryColor || '#10b981',
