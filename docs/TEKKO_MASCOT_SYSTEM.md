@@ -133,6 +133,6 @@ npm run build
 - [x] Add SVG fallback assets.
 - [x] Add Tekko to landing and widget surfaces.
 - [x] Add production asset source contract.
-- [ ] Export reference-quality PNG/WebP assets.
-- [ ] Update verification to require production assets once they exist.
+- [x] Export reference-quality PNG/WebP assets with alpha transparency.
+- [x] Update verification to require production assets.
 - [ ] Add Lottie or spritesheet animation after static assets are stable.

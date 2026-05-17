@@ -519,7 +519,7 @@ export default function HomePage() {
                   — vores egen AI-assistent Tekko er et levende bevis.
                 </p>
                 <div className="flex items-center gap-3 pt-2">
-                  <TekkoMascot state="idle" size="sm" animated={false} />
+                  <TekkoMascot state="idle" size="sm" />
                   <span className="text-xs text-muted">
                     Tekko, vores interne AI-maskot — til stede i hele produktet.
                   </span>
@@ -599,7 +599,7 @@ export default function HomePage() {
                   </p>
 
                   <div className="flex items-center gap-4 border-t border-border pt-6">
-                    <TekkoMascot state="idle" size="md" animated={false} />
+                    <TekkoMascot state="idle" size="md" />
                     <div>
                       <p className="text-sm font-semibold text-white">Tekko læser med på behovet.</p>
                       <p className="mt-1 text-sm leading-relaxed text-muted-light">
@@ -707,7 +707,7 @@ function ContactForm() {
   if (state === "sent") {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-brand/20 bg-brand/5 px-6 py-12 text-center">
-        <TekkoMascot state="success" size="lg" animated={false} />
+        <TekkoMascot state="success" size="lg" />
         <h3 className="mt-4 text-lg font-bold text-white">Tak for din henvendelse!</h3>
         <p className="mt-2 text-sm text-muted-light">
           Tekko har sendt beskeden videre. Vi vender tilbage inden for 24 timer — typisk meget hurtigere.
