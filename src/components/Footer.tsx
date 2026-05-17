@@ -10,7 +10,7 @@ const footerLinks = {
     { label: "Chatbot Basis", href: "/#chatbot" },
   ],
   virksomhed: [
-    { label: "Om os", href: "/#about" },
+    { label: "Om os", href: "/#om-os" },
     { label: "Kontakt", href: "/#kontakt" },
   ],
   legal: [

@@ -494,6 +494,59 @@ export default function HomePage() {
         </section>
       </RevealSection>
 
+      {/* ============ ABOUT ============ */}
+      <RevealSection>
+        <section id="om-os" className="scroll-mt-20 py-20">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+            <SectionHeader
+              title="Om Tekup Digital"
+              subtitle="Vi bygger AI-løsninger der virker — til danske SMV&apos;er"
+            />
+
+            <div className="grid gap-10 md:grid-cols-2">
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-white">
+                  AI skal ikke være kompliceret
+                </h3>
+                <p className="text-sm leading-relaxed text-muted-light">
+                  Tekup Digital er grundlagt med én mission: gøre AI tilgængeligt for danske
+                  SMV&apos;er uden store IT-afdelinger. Vi bygger AI-agenter, hjemmesider og
+                  chatbots der sparer tid og skaber resultater — fra dag ét.
+                </p>
+                <p className="text-sm leading-relaxed text-muted-light">
+                  Vores løsninger kører på Cloudflare&apos;s infrastruktur og er designet til at
+                  være hurtige, sikre og GDPR-compliant. Vi bruger selv teknologieme vi sælger
+                  — vores egen AI-assistent Tekko er et levende bevis.
+                </p>
+                <div className="flex items-center gap-3 pt-2">
+                  <TekkoMascot state="idle" size="sm" animated={false} />
+                  <span className="text-xs text-muted">
+                    Tekko, vores interne AI-maskot — til stede i hele produktet.
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-white">
+                  Vores værdier
+                </h3>
+                <ul className="space-y-4">
+                  {[
+                    { title: "Enkelthed", desc: "Vi skærer igennem kompleksiteten. AI skal være lige til at tage i brug." },
+                    { title: "Gennemsigtighed", desc: "Faste priser, ingen skjulte gebyrer, løbende opsigelse." },
+                    { title: "Dansk support", desc: "Vi er baseret i Aarhus og taler dansk — også når det gælder support." },
+                  ].map((v) => (
+                    <li key={v.title} className="rounded-lg border border-border bg-card/40 p-4">
+                      <p className="text-sm font-bold text-white">{v.title}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-muted-light">{v.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </RevealSection>
+
       {/* ============ CONTACT ============ */}
       <RevealSection>
         <section id="kontakt" className="scroll-mt-20 py-20">
