@@ -1,75 +1,45 @@
-# Tekko Mascot System v2
+# Tekko Mascot System v3
 
-Tekko is Tekup Digital's reusable product mascot system for assistant widgets, onboarding moments, status feedback, and chatbot/dashboard surfaces.
+Tekko is Tekup Digital's reusable product mascot for assistant widgets, onboarding, status feedback, chatbot surfaces, and dashboards.
 
 ## Identity
 
 Tekko is a small cyber-fennec fox AI companion.
 
-Visual anchors:
+v3 aligns the production SVGs with the original Tekko reference concept. Tekko is no longer just a head icon. It now uses a semi-full-body silhouette, visible workflow tail, circuit details, and a warm orange accent.
+
+## Required visual anchors
+
+Every Tekko state asset must keep:
 
 - oversized fennec ears
-- dark navy / charcoal body (#111827)
-- emerald green outline (#10B981)
-- electric cyan eyes (#22D3EE)
-- warm amber accent (#F59E0B)
-
-The mascot must stay original to Tekup. Do not copy existing mascot systems from other companies.
+- semi-full-body silhouette
+- dark navy / charcoal body
+- emerald or cyan glow outline
+- electric cyan or state-specific eyes
+- visible cyan circuit-line details
+- warm orange / amber chest accent
+- workflow / signal-path tail with node dots
+- readable shape at small UI sizes
 
 ## State model
 
 The state model lives in `src/components/tekko/tekkoStates.ts`.
 
-8 states:
+States:
 
-| State | Eye | Color | Use |
-|-------|-----|-------|-----|
-| `idle` | Circle | cyan #22D3EE | Default, header avatar |
-| `thinking` | Small dot | light-cyan #67E8F9 | During API calls |
-| `working` | Full solid | emerald #10B981 | Processing data |
-| `success` | Crescent | green #34D399 | Operation complete |
-| `warning` | Triangle/exclamation | amber #F59E0B | Rate limits, notices |
-| `error` | X shape | red #EF4444 | API failure |
-| `sleeping` | Horizontal line | mint #6EE7B7 | Idle timeout |
-| `connecting` | One blinking | cyan #22D3EE | Reconnecting |
-
-## Components
-
-Current v1 files:
-
-```txt
-src/components/tekko/tekkoStates.ts
-src/components/tekko/TekkoMascot.tsx
-src/components/tekko/TekkoAssistantWidget.tsx
-src/components/tekko/TekkoStatusCard.tsx
-src/components/tekko/TekkoEmptyState.tsx
-src/components/tekko/TekkoToast.tsx
-src/components/tekko/TekkoAvatar.tsx
-src/components/tekko/index.ts
-```
-
-Example usage:
-
-```tsx
-<TekkoMascot state="thinking" size="md" animated />
-
-<TekkoAssistantWidget
-  state="working"
-  title="Tekko is analyzing your workflow..."
-  message="I’m gathering the right context."
-  progress={72}
-/>
-
-<TekkoToast
-  state="success"
-  title="Automation klar"
-  message="3 opgaver blev gennemført."
-/>
-```
+- `idle`
+- `thinking`
+- `working`
+- `success`
+- `warning`
+- `error`
+- `sleeping`
+- `connecting`
 
 ## Asset contract
 
-Production assets should be placed in `public/tekko/` using this naming convention:
+Production assets live in `public/tekko/`:
 
 ```txt
 tekko-idle.svg
@@ -79,23 +49,35 @@ tekko-success.svg
 tekko-warning.svg
 tekko-error.svg
 tekko-sleeping.svg
+tekko-connecting.svg
 tekko-avatar.svg
 tekko-badge.svg
 tekko-app-icon.png
 ```
 
-`TekkoMascot` includes fallback rendering so missing assets do not break the UI.
-
 ## Usage rules
 
-Use Tekko for helpful product moments: onboarding, assistant status, empty states, success states, and clear feedback. Avoid using Tekko inside dense data views or as decoration with no purpose.
+Use Tekko for helpful product moments: onboarding, assistant status, empty states, success states, and clear feedback.
 
-## Next steps
+Do not use Tekko inside dense data views or as decoration with no purpose.
 
-- [x] Replace placeholder SVGs with final transparent assets.
+## Verification
+
+Run:
+
+```bash
+npm run verify:tekko
+npm run lint
+npm run build
+```
+
+## Current status
+
+- [x] Replace placeholder SVGs with state assets.
 - [x] Add connecting state.
-- [x] Add Tekko to the landing page hero or trust section.
+- [x] Add Tekko to the landing page hero.
 - [x] Add Tekko to contact success feedback.
-- [x] Add Tekko to Agent Dashboard header.
+- [x] Add Tekko chat widget embed.
+- [x] Align all 8 state SVGs with the v3 reference concept.
 - [ ] Extend the same state model to chatbot backend responses.
-- [ ] Add animation through Lottie or spritesheets after static assets are stable.
+- [ ] Add Lottie or spritesheet animation after static assets are stable.
