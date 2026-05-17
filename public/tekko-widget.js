@@ -110,7 +110,6 @@
 
   // ─── State ───────────────────────────────────────────────────────────
   let config = {};
-  let messages = [];
   let isOpen = false;
   let isSending = false;
   let sessionId = 'tekko-' + Math.random().toString(36).slice(2, 8);
@@ -230,7 +229,7 @@
         const data = await resp.json();
         thinkingEl.remove();
         addMessage(data.reply || 'Beklager, jeg kunne ikke generere et svar.', 'bot');
-      } catch (err) {
+      } catch {
         thinkingEl.remove();
         addMessage('Beklager, der opstod en teknisk fejl. Prøv venligst igen.', 'bot');
       } finally {

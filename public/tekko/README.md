@@ -2,29 +2,37 @@
 
 This folder contains the public asset contract for Tekko, Tekup's product mascot.
 
-Current status: placeholder-first. The committed state SVGs are intentionally simple so the component system can be wired before final brand assets are exported.
+Current status: **production-ready**. Full-body PNG/WebP assets are committed, with SVG fallbacks retained for compatibility.
 
-## Required production assets
+## Production assets
 
-The state contract is present with placeholder SVGs:
+All 8 Tekko states are available in three formats:
 
-```txt
-public/tekko/tekko-idle.svg
-public/tekko/tekko-thinking.svg
-public/tekko/tekko-working.svg
-public/tekko/tekko-success.svg
-public/tekko/tekko-warning.svg
-public/tekko/tekko-error.svg
-public/tekko/tekko-sleeping.svg
+```
+public/tekko/tekko-idle.{svg,webp,png}
+public/tekko/tekko-thinking.{svg,webp,png}
+public/tekko/tekko-working.{svg,webp,png}
+public/tekko/tekko-success.{svg,webp,png}
+public/tekko/tekko-warning.{svg,webp,png}
+public/tekko/tekko-error.{svg,webp,png}
+public/tekko/tekko-sleeping.{svg,webp,png}
+public/tekko/tekko-connecting.{svg,webp,png}
 ```
 
-Add these final transparent brand assets when the illustration pipeline is ready:
+Plus bonus assets:
 
-```txt
-public/tekko/tekko-avatar.svg
-public/tekko/tekko-badge.svg
-public/tekko/tekko-app-icon.png
 ```
+public/tekko/tekko-avatar.{png,webp}
+public/tekko/tekko-badge.{png,webp}
+public/tekko/tekko-app-icon.{png,webp}
+```
+
+## Fallback chain
+
+`TekkoMascot` loads assets in this order:
+1. WebP → 2. PNG → 3. SVG → 4. Text placeholder
+
+This means modern browsers get WebP, older browsers get PNG, and SVG is always available as a last-resort fallback.
 
 ## Production guidance
 
@@ -33,7 +41,3 @@ public/tekko/tekko-app-icon.png
 - Do not copy Codex, Claude/Clawd, GitHub Octocat, OpenAI marks, or any other mascot.
 - Keep small-size readability as the highest priority.
 - Use Lottie or spritesheets later only when the static state system is stable.
-
-## Temporary fallback
-
-`TekkoMascot` has a built-in fallback if any image is missing. This lets us merge the system before all production assets exist without breaking UI rendering.
