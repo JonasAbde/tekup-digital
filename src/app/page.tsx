@@ -654,7 +654,7 @@ function ContactForm() {
   if (state === "sent") {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-brand/20 bg-brand/5 px-6 py-12 text-center">
-        <TekkoMascot state="idle" size="lg" animated={false} />
+        <TekkoMascot state="success" size="lg" animated={false} />
         <h3 className="mt-4 text-lg font-bold text-white">Tak for din henvendelse!</h3>
         <p className="mt-2 text-sm text-muted-light">
           Tekko har sendt beskeden videre. Vi vender tilbage inden for 24 timer — typisk meget hurtigere.
