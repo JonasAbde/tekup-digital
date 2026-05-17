@@ -23,8 +23,6 @@ jobs:
       - run: npm run build
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 1cd2e6c70a2918567a3edcf8eadd7458
-          command: pages deploy out --project-name=tekup-digital
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler pages deploy out --project-name=tekup-digital --branch main
