@@ -92,6 +92,11 @@ if (existsSync(join(root, "src/app/layout.tsx"))) {
 if (existsSync(join(root, "public/tekko-widget.js"))) {
   const widget = read("public/tekko-widget.js");
   check(widget.includes("window.TekkoWidget"), "Tekko widget does not expose window.TekkoWidget");
+  check(widget.includes("TEKKO_IDLE_SOURCES"), "Tekko widget does not define asset source fallback list");
+  check(widget.includes("/tekko/tekko-idle.webp"), "Tekko widget does not try WebP mascot asset");
+  check(widget.includes("/tekko/tekko-idle.png"), "Tekko widget does not try PNG mascot asset");
+  check(widget.includes("/tekko/tekko-idle.svg"), "Tekko widget does not keep SVG mascot fallback");
+  check(widget.includes("createTekkoImage"), "Tekko widget does not centralize mascot image creation");
   check(widget.includes("Tekko tænker"), "Tekko widget does not show thinking copy");
   check(widget.includes("/api/chat"), "Tekko widget does not call the expected chat endpoint");
   check(widget.includes("escapeHtml"), "Tekko widget is missing escapeHtml safety helper");
@@ -103,4 +108,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, production asset source contract, preview lab, landing integration, and widget embed are present.`);
+console.log(`Tekko verification passed: ${requiredStates.length} states, SVG fallbacks, production asset source contract, preview lab, landing integration, widget asset pipeline, and widget embed are present.`);

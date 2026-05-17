@@ -1,6 +1,6 @@
 /**
  * Tekko Chat Widget — Vanilla JS embed
- * 
+ *
  * Embed på din hjemmeside:
  * <script src="https://tekup-chatbot-widget.pages.dev/tekko-widget.js"></script>
  * <script>TekkoWidget.init({ apiUrl: "https://chat.tekup.dk" })</script>
@@ -20,7 +20,12 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     #tekko-widget-button:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5); }
-    #tekko-widget-button svg { width: 28px; height: 28px; }
+    #tekko-widget-button .tekko-widget-avatar { width: 34px; height: 34px; object-fit: contain; position: relative; z-index: 1; }
+    #tekko-widget-button .tekko-widget-fallback {
+      width: 34px; height: 34px; border-radius: 50%; background: #111827; color: #22d3ee;
+      display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
+      position: relative; z-index: 1;
+    }
     #tekko-widget-button .pulse {
       position: absolute; width: 100%; height: 100%; border-radius: 50%;
       background: #10b981; opacity: 0.3; animation: tekko-pulse 2s infinite;
@@ -47,7 +52,7 @@
       background: #10b981; padding: 14px 16px; display: flex;
       align-items: center; gap: 10px; flex-shrink: 0;
     }
-    .tekko-header-avatar { width: 32px; height: 32px; border-radius: 50%; }
+    .tekko-header-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: rgba(255,255,255,0.12); }
     .tekko-header-text { flex: 1; }
     .tekko-header-title { color: #fff; font-weight: 600; font-size: 14px; }
     .tekko-header-sub { color: rgba(255,255,255,0.8); font-size: 11px; }
@@ -95,22 +100,11 @@
     .tekko-send svg { width: 16px; height: 16px; fill: white; }
   `;
 
-  // Tekko SVG icon (cyber-fennec fox)
-  const TEKKO_IDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-    <defs><radialGradient id="tg"><stop offset="0%" stop-color="#10B981" stop-opacity="0.10"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></radialGradient><linearGradient id="tf" x1="48" y1="36" x2="208" y2="228"><stop stop-color="#111827"/><stop offset="1" stop-color="#0f0f0f"/></linearGradient></defs>
-    <ellipse cx="128" cy="140" rx="100" ry="100" fill="url(#tg)"/>
-    <path d="M72 105 45 34l62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M72 105 55 55l44 38" fill="#10B981" opacity="0.15"/>
-    <path d="M184 105 211 34l-62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M184 105 201 55l-44 38" fill="#10B981" opacity="0.15"/>
-    <path d="M78 88c12-22 33-34 50-34s38 12 50 34c18 4 34 24 34 56 0 48-36 78-84 78s-84-30-84-78c0-32 16-52 34-56Z" fill="url(#tf)" stroke="#10B981" stroke-width="4"/>
-    <circle cx="104" cy="148" r="10" fill="#22D3EE"/>
-    <circle cx="152" cy="148" r="10" fill="#22D3EE"/>
-    <circle cx="100" cy="144" r="3" fill="#ffffff" opacity="0.5"/>
-    <circle cx="148" cy="144" r="3" fill="#ffffff" opacity="0.5"/>
-    <path d="M119 166c4 4 14 4 18 0" fill="none" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
-  </svg>`;
-
+  const TEKKO_IDLE_SOURCES = [
+    '/tekko/tekko-idle.webp',
+    '/tekko/tekko-idle.png',
+    '/tekko/tekko-idle.svg',
+  ];
   const CLOSE_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
   const SEND_ICON = `<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`;
 
@@ -134,26 +128,44 @@
     return d.innerHTML;
   }
 
+  function createTekkoImage(className) {
+    const img = document.createElement('img');
+    img.className = className;
+    img.alt = 'Tekko';
+    img.loading = 'lazy';
+    let sourceIndex = 0;
+    img.src = TEKKO_IDLE_SOURCES[sourceIndex];
+    img.onerror = function () {
+      sourceIndex += 1;
+      if (sourceIndex < TEKKO_IDLE_SOURCES.length) {
+        img.src = TEKKO_IDLE_SOURCES[sourceIndex];
+        return;
+      }
+      const fallback = document.createElement('div');
+      fallback.className = className.includes('header') ? 'tekko-header-avatar tekko-widget-fallback' : 'tekko-widget-fallback';
+      fallback.textContent = 'TK';
+      img.replaceWith(fallback);
+    };
+    return img;
+  }
+
   // ─── Build UI ────────────────────────────────────────────────────────
   function buildWidget() {
-    // Inject styles
     const styleTag = document.createElement('style');
     styleTag.textContent = styles;
     document.head.appendChild(styleTag);
 
-    // Button
     const btn = createElement(`
       <button id="tekko-widget-button" aria-label="Åbn chat">
         <div class="pulse"></div>
-        ${TEKKO_IDLE_SVG}
       </button>
     `);
+    btn.appendChild(createTekkoImage('tekko-widget-avatar'));
 
-    // Window
     const win = createElement(`
       <div id="tekko-widget-window">
         <div class="tekko-header">
-          <img class="tekko-header-avatar" src="data:image/svg+xml,${encodeURIComponent(TEKKO_IDLE_SVG)}" alt="Tekko">
+          <div class="tekko-header-avatar-slot"></div>
           <div class="tekko-header-text">
             <div class="tekko-header-title">Tekup Chatbot</div>
             <div class="tekko-header-sub">${config.subtitle || 'Spørg om vores løsninger'}</div>
@@ -169,11 +181,11 @@
         </div>
       </div>
     `);
+    win.querySelector('.tekko-header-avatar-slot').appendChild(createTekkoImage('tekko-header-avatar'));
 
     document.body.appendChild(btn);
     document.body.appendChild(win);
 
-    // ─── Events ──────────────────────────────────────────────────────
     btn.addEventListener('click', () => toggle());
     win.querySelector('.tekko-close-btn').addEventListener('click', () => toggle());
 
@@ -199,12 +211,9 @@
       if (!text || isSending) return;
       input.value = '';
       sendBtn.disabled = true;
-
-      // Add user message
       addMessage(text, 'user');
       isSending = true;
 
-      // Show thinking
       const thinkingEl = document.createElement('div');
       thinkingEl.className = 'tekko-msg tekko-msg-thinking';
       thinkingEl.textContent = 'Tekko tænker...';
@@ -219,7 +228,6 @@
         });
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
-        // Remove thinking indicator
         thinkingEl.remove();
         addMessage(data.reply || 'Beklager, jeg kunne ikke generere et svar.', 'bot');
       } catch (err) {
@@ -248,7 +256,7 @@
 
   // ─── Init ────────────────────────────────────────────────────────────
   window.TekkoWidget = {
-    init: function (opts) {
+    init: function (opts = {}) {
       config = {
         apiUrl: opts.apiUrl || 'https://chat.tekup.dk',
         greeting: opts.greeting || 'Hej! 👋 Hvordan kan jeg hjælpe dig i dag?',
