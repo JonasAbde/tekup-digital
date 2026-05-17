@@ -94,7 +94,7 @@ Use Tekko for helpful product moments: onboarding, assistant status, empty state
 
 - [x] Replace placeholder SVGs with final transparent assets.
 - [x] Add connecting state.
-- [ ] Add Tekko to the landing page hero or trust section.
-- [ ] Add Tekko to contact success feedback.
+- [x] Add Tekko to the landing page hero or trust section.
+- [x] Add Tekko to contact success feedback.
 - [ ] Extend the same state model to chatbot and agent dashboard surfaces.
 - [ ] Add animation through Lottie or spritesheets after static assets are stable.

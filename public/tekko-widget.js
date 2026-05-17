@@ -95,16 +95,20 @@
     .tekko-send svg { width: 16px; height: 16px; fill: white; }
   `;
 
-  // Tekko SVG icon (simplified fox face)
+  // Tekko SVG icon (cyber-fennec fox)
   const TEKKO_IDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-    <circle cx="128" cy="142" r="104" fill="#10B981" opacity="0.12"/>
-    <path d="M70 105 43 34l62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
-    <path d="M186 105 213 34l-62 45" fill="#101827" stroke="#34D399" stroke-width="6" stroke-linejoin="round"/>
-    <path d="M80 88c12-22 33-34 48-34s36 12 48 34c19 3 34 23 34 54 0 47-35 76-82 76s-82-29-82-76c0-31 15-51 34-54Z" fill="url(#g)" stroke="#34D399" stroke-width="5"/>
-    <defs><linearGradient id="g" x1="48" y1="36" x2="208" y2="228"><stop stop-color="#111827"/><stop offset="1" stop-color="#0A0A0A"/></linearGradient></defs>
-    <circle cx="101" cy="145" r="9" fill="#67E8F9"/><circle cx="155" cy="145" r="9" fill="#67E8F9"/>
-    <path d="M118 164c5 5 15 5 20 0" fill="none" stroke="#E5E7EB" stroke-width="6" stroke-linecap="round"/>
-    <path d="M128 178 143 199h-30l15-21Z" fill="#F59E0B"/>
+    <defs><radialGradient id="tg"><stop offset="0%" stop-color="#10B981" stop-opacity="0.10"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></radialGradient><linearGradient id="tf" x1="48" y1="36" x2="208" y2="228"><stop stop-color="#111827"/><stop offset="1" stop-color="#0f0f0f"/></linearGradient></defs>
+    <ellipse cx="128" cy="140" rx="100" ry="100" fill="url(#tg)"/>
+    <path d="M72 105 45 34l62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M72 105 55 55l44 38" fill="#10B981" opacity="0.15"/>
+    <path d="M184 105 211 34l-62 47" fill="#111827" stroke="#10B981" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M184 105 201 55l-44 38" fill="#10B981" opacity="0.15"/>
+    <path d="M78 88c12-22 33-34 50-34s38 12 50 34c18 4 34 24 34 56 0 48-36 78-84 78s-84-30-84-78c0-32 16-52 34-56Z" fill="url(#tf)" stroke="#10B981" stroke-width="4"/>
+    <circle cx="104" cy="148" r="10" fill="#22D3EE"/>
+    <circle cx="152" cy="148" r="10" fill="#22D3EE"/>
+    <circle cx="100" cy="144" r="3" fill="#ffffff" opacity="0.5"/>
+    <circle cx="148" cy="144" r="3" fill="#ffffff" opacity="0.5"/>
+    <path d="M119 166c4 4 14 4 18 0" fill="none" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
   </svg>`;
 
   const CLOSE_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
