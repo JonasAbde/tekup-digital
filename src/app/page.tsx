@@ -666,21 +666,68 @@ const SERVICE_OPTIONS = [
   { value: "other", label: "Andet / ved ikke endnu" },
 ];
 
+type FormField = "name" | "email" | "message";
+
+type FieldErrors = Partial<Record<FormField, string>>;
+
+function validateField(field: FormField, value: string): string {
+  switch (field) {
+    case "name":
+      return value.trim().length < 2 ? "Navn skal være mindst 2 tegn" : "";
+    case "email":
+      return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? "Indtast en gyldig email-adresse" : "";
+    case "message":
+      return value.trim().length < 10 ? "Besked skal være mindst 10 tegn" : "";
+  }
+}
+
+function Spinner() {
+  return (
+    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
+      <path d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" fill="currentColor" className="opacity-75" />
+    </svg>
+  );
+}
+
 function ContactForm() {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<FormField, boolean>>>({});
+
+  const validateForm = useCallback((data: FormData): boolean => {
+    const errors: FieldErrors = {};
+    for (const field of ["name", "email", "message"] as FormField[]) {
+      const value = data.get(field) as string;
+      const err = validateField(field, value);
+      if (err) errors[field] = err;
+    }
+    setFieldErrors(errors);
+    setTouched({ name: true, email: true, message: true });
+    return Object.keys(errors).length === 0;
+  }, []);
+
+  const handleBlur = useCallback((field: FormField) => {
+    return (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setTouched((prev) => ({ ...prev, [field]: true }));
+      const err = validateField(field, e.target.value);
+      setFieldErrors((prev) => ({ ...prev, [field]: err }));
+    };
+  }, []);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
+
+    if (!validateForm(data)) return;
+
     const name = data.get("name") as string;
     const email = data.get("email") as string;
     const message = data.get("message") as string;
     const service = data.get("service") as string;
     const company = data.get("company") as string;
-
-    if (!name || !email || !message) return;
 
     setState("sending");
     setErrorMsg("");
@@ -702,7 +749,7 @@ function ContactForm() {
       setState("error");
       setErrorMsg(err instanceof Error ? err.message : "Der skete en fejl");
     }
-  }, []);
+  }, [validateForm]);
 
   if (state === "sent") {
     return (
@@ -745,8 +792,18 @@ function ContactForm() {
             name="name"
             required
             placeholder="Dit navn"
-            className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
+            onBlur={handleBlur("name")}
+            className={`w-full rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
+              touched.name && fieldErrors.name
+                ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
+                : touched.name && !fieldErrors.name
+                  ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
+                  : "border-border focus:border-brand/50 focus:ring-brand/20"
+            }`}
           />
+          {touched.name && fieldErrors.name && (
+            <p className="mt-1 text-xs text-red-400">{fieldErrors.name}</p>
+          )}
         </div>
         <div>
           <label htmlFor="email" className="mb-1 block text-sm font-medium text-muted-light">
@@ -758,8 +815,18 @@ function ContactForm() {
             name="email"
             required
             placeholder="din@email.dk"
-            className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
+            onBlur={handleBlur("email")}
+            className={`w-full rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
+              touched.email && fieldErrors.email
+                ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
+                : touched.email && !fieldErrors.email
+                  ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
+                  : "border-border focus:border-brand/50 focus:ring-brand/20"
+            }`}
           />
+          {touched.email && fieldErrors.email && (
+            <p className="mt-1 text-xs text-red-400">{fieldErrors.email}</p>
+          )}
         </div>
       </div>
       <div>
@@ -784,8 +851,18 @@ function ContactForm() {
           required
           rows={4}
           placeholder="Fortæl lidt om din virksomhed og hvad du har brug for..."
-          className="w-full resize-none rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
+          onBlur={handleBlur("message")}
+          className={`w-full resize-none rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
+            touched.message && fieldErrors.message
+              ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
+              : touched.message && !fieldErrors.message
+                ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
+                : "border-border focus:border-brand/50 focus:ring-brand/20"
+          }`}
         />
+        {touched.message && fieldErrors.message && (
+          <p className="mt-1 text-xs text-red-400">{fieldErrors.message}</p>
+        )}
       </div>
       {state === "error" && (
         <div className="flex items-center gap-3 rounded-xl border border-red-400/20 bg-red-500/5 px-4 py-3">
@@ -810,9 +887,15 @@ function ContactForm() {
       <button
         type="submit"
         disabled={state === "sending"}
-        className="w-full rounded-lg bg-brand px-6 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-6 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50"
       >
-        {state === "sending" ? "Sender..." : "Send besked"}
+        {state === "sending" ? (
+          <>
+            <Spinner /> Sender...
+          </>
+        ) : (
+          "Send besked"
+        )}
       </button>
       <p className="text-center text-xs text-muted">
         Vi deler aldrig dine oplysninger med tredjepart.
