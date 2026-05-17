@@ -1,12 +1,10 @@
 # Tekko asset contract
 
-This folder contains the public asset contract for Tekko, Tekup's product mascot.
+This folder contains the public SVG asset contract for Tekko, Tekup Digital's product mascot.
 
-Current status: placeholder-first. The committed state SVGs are intentionally simple so the component system can be wired before final brand assets are exported.
+Current status: v3 reference-aligned assets.
 
-## Required production assets
-
-The state contract is present with placeholder SVGs:
+## Required state assets
 
 ```txt
 public/tekko/tekko-idle.svg
@@ -16,9 +14,10 @@ public/tekko/tekko-success.svg
 public/tekko/tekko-warning.svg
 public/tekko/tekko-error.svg
 public/tekko/tekko-sleeping.svg
+public/tekko/tekko-connecting.svg
 ```
 
-Add these final transparent brand assets when the illustration pipeline is ready:
+## Optional brand/export assets
 
 ```txt
 public/tekko/tekko-avatar.svg
@@ -26,14 +25,27 @@ public/tekko/tekko-badge.svg
 public/tekko/tekko-app-icon.png
 ```
 
+## v3 visual requirements
+
+Every state asset should keep:
+
+- oversized fennec ears
+- semi-full-body silhouette
+- dark navy / charcoal body
+- cyan or emerald glow outline
+- cyan circuit-line details
+- warm orange / amber chest accent
+- workflow / signal-path tail with node dots
+- readable shape at small UI sizes
+
 ## Production guidance
 
 - Use transparent SVG or PNG for state illustrations.
-- Keep Tekko's silhouette stable: oversized ears, dark navy body, cyan circuit accents, warm orange chest/tail accent.
+- Keep Tekko's silhouette stable across states.
 - Do not copy Codex, Claude/Clawd, GitHub Octocat, OpenAI marks, or any other mascot.
 - Keep small-size readability as the highest priority.
 - Use Lottie or spritesheets later only when the static state system is stable.
 
-## Temporary fallback
+## Fallback
 
-`TekkoMascot` has a built-in fallback if any image is missing. This lets us merge the system before all production assets exist without breaking UI rendering.
+`TekkoMascot` has built-in fallback rendering if any image is missing. The fallback is for resilience only. Production should keep every state asset present.
