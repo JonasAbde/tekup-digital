@@ -135,4 +135,6 @@ npm run build
 - [x] Add production asset source contract.
 - [x] Export reference-quality PNG/WebP assets with alpha transparency.
 - [x] Update verification to require production assets.
+- [x] Tekko states used in contact form (working/error/success)
+- [x] Animations enabled on all landing page Tekko instances
 - [ ] Add Lottie or spritesheet animation after static assets are stable.

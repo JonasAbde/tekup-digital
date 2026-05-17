@@ -43,6 +43,9 @@ All items from the recommended next PR (below) are now complete:
 3. ✅ Tekko assistant card in hero (TekkoAssistantWidget)
 4. ✅ TekkoToast / success state on contact form
 5. ✅ TekkoEmptyState added where applicable
+6. ✅ Tekko states during form submission (working/error/success)
+7. ✅ OG image with Tekko badge generated
+8. ✅ All Tekko animations enabled on landing page
 
 Tekko is now live across:
 - `tekup.dk` — React components in hero, contact, success state
