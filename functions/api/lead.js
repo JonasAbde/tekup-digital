@@ -3,64 +3,135 @@
  *
  * Captures contact form submissions and stores them.
  * Tries to forward to Sales OS backend if configured.
- * Falls back gracefully — the user always gets a success response.
+ * Falls back to KV and a bounded in-memory queue.
  *
- * Environment variables (set in Cloudflare Pages dashboard):
- *   SALES_OS_URL  — Backend URL (e.g. https://sales-os.tekup.dk)
- *   CF_LEAD_KV    — KV namespace binding name for lead storage
+ * Environment variables / bindings:
+ *   SALES_OS_URL      — Backend URL, e.g. https://sales-os.tekup.dk
+ *   LEAD_STORAGE      — KV namespace binding for durable fallback storage
+ *   ALLOWED_ORIGINS   — Optional comma-separated allowlist. Defaults to tekup.dk origins.
  */
 
-// In-memory queue for submissions when backend is unreachable.
-// Lost on worker restart — KV storage is preferred for durability.
 const pendingQueue = [];
+
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://tekup.dk',
+  'https://www.tekup.dk',
+];
+
+const MAX_FIELD_LENGTHS = {
+  name: 120,
+  email: 254,
+  message: 4000,
+  service: 120,
+  company: 160,
+};
+
+function getAllowedOrigins(env) {
+  return (env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(','))
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function corsHeaders(request, env) {
+  const origin = request.headers.get('Origin') || '';
+  const allowedOrigins = getAllowedOrigins(env);
+  const allowOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
+  return {
+    'Access-Control-Allow-Origin': allowOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
+  };
+}
+
+function json(payload, status, headers) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+  });
+}
+
+function clean(value, maxLength) {
+  return String(value || '').trim().slice(0, maxLength);
+}
+
+function validateLead(body) {
+  const lead = {
+    name: clean(body.name, MAX_FIELD_LENGTHS.name),
+    email: clean(body.email, MAX_FIELD_LENGTHS.email).toLowerCase(),
+    message: clean(body.message, MAX_FIELD_LENGTHS.message),
+    service: clean(body.service, MAX_FIELD_LENGTHS.service),
+    company: clean(body.company, MAX_FIELD_LENGTHS.company),
+  };
+
+  if (clean(body.website, 500)) {
+    return { spam: true, lead };
+  }
+
+  if (lead.name.length < 2) {
+    return { error: 'Navn skal være mindst 2 tegn', lead };
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) {
+    return { error: 'Indtast en gyldig email-adresse', lead };
+  }
+
+  if (lead.message.length < 10) {
+    return { error: 'Besked skal være mindst 10 tegn', lead };
+  }
+
+  return { lead };
+}
+
+async function readJson(request) {
+  const contentType = request.headers.get('Content-Type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error('Unsupported content type');
+  }
+  return request.json();
+}
 
 export async function onRequest(context) {
   const { request, env } = context;
+  const headers = corsHeaders(request, env);
 
-  // CORS headers
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  };
-
-  // Handle preflight
   if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response(null, { status: 204, headers });
   }
 
   if (request.method !== 'POST') {
-    return new Response(
-      JSON.stringify({ error: 'Method not allowed' }),
-      { status: 405, headers: { 'Content-Type': 'application/json', ...corsHeaders, Allow: 'POST' } },
-    );
+    return json({ error: 'Method not allowed' }, 405, { ...headers, Allow: 'POST' });
   }
 
   try {
-    const body = await request.json();
-    const { name, email, message, service, company } = body;
+    const body = await readJson(request);
+    const validation = validateLead(body);
 
-    // Validate
-    if (!name || !email || !message) {
-      return new Response(
-        JSON.stringify({ error: 'Navn, email og besked er påkrævet' }),
-        { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } },
-      );
+    if (validation.spam) {
+      return json({ success: true, message: 'Tak for din henvendelse! Vi vender tilbage inden for 24 timer.' }, 201, headers);
+    }
+
+    if (validation.error) {
+      return json({ error: validation.error }, 400, headers);
     }
 
     const lead = {
-      name,
-      email,
-      message,
-      service: service || '',
-      company: company || '',
+      ...validation.lead,
+      id: crypto.randomUUID(),
       source: 'tekup.dk',
+      source_url: clean(body.source_url, 500),
       captured_at: new Date().toISOString(),
+      user_agent: clean(request.headers.get('User-Agent'), 500),
     };
 
-    // 1. Try SALES_OS backend
     let backendOk = false;
-    const backendUrl = env.SALES_OS_URL;
+    const backendUrl = clean(env.SALES_OS_URL, 500).replace(/\/$/, '');
+
     if (backendUrl) {
       try {
         const backendResp = await fetch(`${backendUrl}/api/lead`, {
@@ -71,46 +142,35 @@ export async function onRequest(context) {
         });
         backendOk = backendResp.ok;
       } catch {
-        // Backend unreachable — fall through to KV / queue
+        backendOk = false;
       }
     }
 
-    // 2. Store in KV (if bound)
     if (!backendOk && env.LEAD_STORAGE) {
       try {
-        const key = `lead:${Date.now()}:${email.replace(/[^a-zA-Z0-9]/g, '_')}`;
+        const key = `lead:${lead.captured_at}:${lead.id}`;
         await env.LEAD_STORAGE.put(key, JSON.stringify(lead), {
-          expirationTtl: 2592000, // 30 days
+          expirationTtl: 2592000,
         });
       } catch {
-        // KV unavailable — fall back to in-memory queue
+        // KV unavailable — fall back to in-memory queue.
       }
     }
 
-    // 3. In-memory fallback (last resort)
     if (!backendOk) {
       pendingQueue.push(lead);
-      // Keep queue bounded
       if (pendingQueue.length > 100) pendingQueue.shift();
     }
 
-    // Always return success to the user
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: `Tak ${name}! Vi vender tilbage inden for 24 timer.`,
-      }),
-      { status: 201, headers: { 'Content-Type': 'application/json', ...corsHeaders } },
-    );
-
+    return json({
+      success: true,
+      lead_id: lead.id,
+      message: `Tak ${lead.name}! Vi vender tilbage inden for 24 timer.`,
+    }, 201, headers);
   } catch {
-    // Catch-all — never expose backend failures to the user
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Tak for din henvendelse! Vi vender tilbage inden for 24 timer.',
-      }),
-      { status: 201, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } },
-    );
+    return json({
+      success: true,
+      message: 'Tak for din henvendelse! Vi vender tilbage inden for 24 timer.',
+    }, 201, headers);
   }
 }
