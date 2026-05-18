@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useId } from "react";
 import Link from "next/link";
 import { TekkoAssistantWidget, TekkoMascot } from "@/components/tekko";
 
@@ -199,7 +199,6 @@ function RevealSection({ children, className = "" }: { children: React.ReactNode
     const cleanupHashReveal = revealOnHashTarget();
     if (cleanupHashReveal) return cleanupHashReveal;
 
-    // Check prefers-reduced-motion
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
       const frame = requestAnimationFrame(reveal);
@@ -253,18 +252,10 @@ function CheckIcon() {
 export default function HomePage() {
   return (
     <>
-      {/* ============ HERO ============ */}
       <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden pt-16">
-        {/* Gradient blobs */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-emerald-950/15 via-black to-black" />
-        <div
-          className="animate-blob pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-emerald-500/10 blur-3xl"
-          aria-hidden="true"
-        />
-        <div
-          className="animate-blob-delayed pointer-events-none absolute -bottom-32 -right-32 h-[30rem] w-[30rem] rounded-full bg-amber-500/10 blur-3xl"
-          aria-hidden="true"
-        />
+        <div className="animate-blob pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-emerald-500/10 blur-3xl" aria-hidden="true" />
+        <div className="animate-blob-delayed pointer-events-none absolute -bottom-32 -right-32 h-[30rem] w-[30rem] rounded-full bg-amber-500/10 blur-3xl" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6">
           <div className="animate-fade-in-up stagger-1">
@@ -286,16 +277,10 @@ export default function HomePage() {
           </p>
 
           <div className="animate-fade-in-up stagger-4 mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="#ydelser"
-              className="rounded-lg bg-brand px-8 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand"
-            >
+            <Link href="#ydelser" className="rounded-lg bg-brand px-8 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand">
               Se vores ydelser
             </Link>
-            <Link
-              href="#kontakt"
-              className="rounded-lg border border-white/20 px-8 py-3 font-semibold text-gray-300 transition-all hover:border-white/40 hover:text-white"
-            >
+            <Link href="#kontakt" className="rounded-lg border border-white/20 px-8 py-3 font-semibold text-gray-300 transition-all hover:border-white/40 hover:text-white">
               Gratis samtale
             </Link>
           </div>
@@ -313,74 +298,32 @@ export default function HomePage() {
             />
           </div>
 
-          {/* Trust indicators */}
           <div className="animate-fade-in-up stagger-5 mx-auto mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs text-muted">
-            <span className="flex items-center gap-1.5">
-              <svg className="h-4 w-4 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Baseret i Aarhus
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg className="h-4 w-4 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Dansk support
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg className="h-4 w-4 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              14 dages fortrydelsesret
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg className="h-4 w-4 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Løbende uden binding
-            </span>
+            {["Baseret i Aarhus", "Dansk support", "14 dages fortrydelsesret", "Løbende uden binding"].map((item) => (
+              <span key={item} className="flex items-center gap-1.5">
+                <svg className="h-4 w-4 text-brand-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ============ SERVICES / AGENT PACKS ============ */}
       <RevealSection>
         <section id="ydelser" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <SectionHeader
-              title="Vores ydelser"
-              subtitle="AI-agenter, hjemmesider og chatbots — skræddersyet til danske SMV'er"
-            />
-
+            <SectionHeader title="Vores ydelser" subtitle="AI-agenter, hjemmesider og chatbots — skræddersyet til danske SMV'er" />
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {services.map((service) => (
-                <div
-                  key={service.id}
-                  id={service.id}
-                  className={`group scroll-mt-24 rounded-xl border p-6 backdrop-blur-sm transition-all duration-300 ${
-                    service.highlight
-                      ? "border-brand/40 bg-gradient-to-b from-brand/10 to-card hover:border-brand/60"
-                      : "border-border bg-card/50 hover:border-border-hover hover:bg-card"
-                  }`}
-                >
+                <div key={service.id} id={service.id} className={`group scroll-mt-24 rounded-xl border p-6 backdrop-blur-sm transition-all duration-300 ${service.highlight ? "border-brand/40 bg-gradient-to-b from-brand/10 to-card hover:border-brand/60" : "border-border bg-card/50 hover:border-border-hover hover:bg-card"}`}>
                   <div className="mb-4 flex items-start justify-between">
-                    <span
-                      className={`inline-block rounded-md px-2.5 py-1 text-xs font-medium ${service.tagColor}`}
-                    >
-                      {service.tag}
-                    </span>
-                    {service.highlight && (
-                      <span className="rounded-md bg-brand/20 px-2.5 py-1 text-xs font-medium text-brand-light">
-                        Spar 25%
-                      </span>
-                    )}
+                    <span className={`inline-block rounded-md px-2.5 py-1 text-xs font-medium ${service.tagColor}`}>{service.tag}</span>
+                    {service.highlight && <span className="rounded-md bg-brand/20 px-2.5 py-1 text-xs font-medium text-brand-light">Spar 25%</span>}
                   </div>
-
                   <h3 className="mb-2 text-lg font-bold text-white">{service.title}</h3>
-                  <p className="mb-4 text-sm leading-relaxed text-muted-light">
-                    {service.description}
-                  </p>
-
+                  <p className="mb-4 text-sm leading-relaxed text-muted-light">{service.description}</p>
                   <ul className="mb-6 space-y-2" role="list" aria-label={`Funktioner for ${service.title}`}>
                     {service.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-400">
@@ -389,17 +332,9 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-
                   <div className="border-t border-border pt-4">
-                    <p className="text-2xl font-bold text-white">
-                      {service.price}
-                      {service.price.includes("kr./md.") && (
-                        <span className="ml-1 text-xs font-normal text-muted">/md.</span>
-                      )}
-                    </p>
-                    {service.setup && (
-                      <p className="mt-0.5 text-xs text-muted">Opsætning: {service.setup}</p>
-                    )}
+                    <p className="text-2xl font-bold text-white">{service.price}</p>
+                    {service.setup && <p className="mt-0.5 text-xs text-muted">Opsætning: {service.setup}</p>}
                   </div>
                 </div>
               ))}
@@ -408,21 +343,14 @@ export default function HomePage() {
         </section>
       </RevealSection>
 
-      {/* ============ HOW IT WORKS ============ */}
       <RevealSection>
         <section id="how-it-works" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
-            <SectionHeader
-              title="Sådan virker det"
-              subtitle="Fra første samtale til kørende løsning på få dage"
-            />
-
+            <SectionHeader title="Sådan virker det" subtitle="Fra første samtale til kørende løsning på få dage" />
             <div className="grid gap-8 sm:grid-cols-3">
               {howItWorks.map((item) => (
                 <div key={item.step} className="text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand to-brand-dark text-xl font-bold text-white shadow-lg shadow-brand/20">
-                    {item.step}
-                  </div>
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand to-brand-dark text-xl font-bold text-white shadow-lg shadow-brand/20">{item.step}</div>
                   <h3 className="mt-5 text-lg font-bold text-white">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-light">{item.description}</p>
                 </div>
@@ -432,15 +360,10 @@ export default function HomePage() {
         </section>
       </RevealSection>
 
-      {/* ============ PRICING TABLE (prisliste) ============ */}
       <RevealSection>
         <section id="priser" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <SectionHeader
-              title="Prisoversigt"
-              subtitle="Gennemsigtige priser — ingen skjulte gebyrer"
-            />
-
+            <SectionHeader title="Prisoversigt" subtitle="Gennemsigtige priser — ingen skjulte gebyrer" />
             <div className="overflow-x-auto rounded-xl border border-border">
               <table className="w-full text-left text-sm" role="table">
                 <thead>
@@ -448,17 +371,12 @@ export default function HomePage() {
                     <th className="px-5 py-4 font-semibold" scope="col">Ydelse</th>
                     <th className="px-5 py-4 font-semibold" scope="col">Type</th>
                     <th className="px-5 py-4 font-semibold" scope="col">Opsætning</th>
-                    <th className="px-5 py-4 font-semibold" scope="col">Månedligt</th>
+                    <th className="px-5 py-4 font-semibold" scope="col">Pris</th>
                   </tr>
                 </thead>
                 <tbody>
                   {services.map((s, i) => (
-                    <tr
-                      key={s.id}
-                      className={`border-b border-border transition-colors hover:bg-card/80 ${
-                        s.highlight ? "bg-brand/5" : ""
-                      } ${i === services.length - 1 ? "border-b-0" : ""}`}
-                    >
+                    <tr key={s.id} className={`border-b border-border transition-colors hover:bg-card/80 ${s.highlight ? "bg-brand/5" : ""} ${i === services.length - 1 ? "border-b-0" : ""}`}>
                       <td className="px-5 py-4 font-medium text-white">{s.title}</td>
                       <td className="px-5 py-4 text-muted-light">{s.tag}</td>
                       <td className="px-5 py-4 text-muted-light">{s.setup}</td>
@@ -468,7 +386,6 @@ export default function HomePage() {
                 </tbody>
               </table>
             </div>
-
             <p className="mt-4 text-center text-xs text-muted">
               Alle priser er ekskl. moms. Opsætningspris betales én gang. Månedlige abonnementer kan opsiges løbende.
             </p>
@@ -476,59 +393,37 @@ export default function HomePage() {
         </section>
       </RevealSection>
 
-      {/* ============ FAQ ============ */}
       <RevealSection>
         <section id="faq" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
-            <SectionHeader
-              title="Ofte stillede spørgsmål"
-              subtitle="Svar på det du måske tænker"
-            />
-
+            <SectionHeader title="Ofte stillede spørgsmål" subtitle="Svar på det du måske tænker" />
             <div className="space-y-3">
-              {faqItems.map((item, i) => (
-                <FAQItem key={i} question={item.q} answer={item.a} />
-              ))}
+              {faqItems.map((item, i) => <FAQItem key={item.q} index={i} question={item.q} answer={item.a} />)}
             </div>
           </div>
         </section>
       </RevealSection>
 
-      {/* ============ ABOUT ============ */}
       <RevealSection>
         <section id="om-os" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <SectionHeader
-              title="Om Tekup Digital"
-              subtitle="Vi bygger AI-løsninger der virker — til danske SMV&apos;er"
-            />
-
+            <SectionHeader title="Om Tekup Digital" subtitle="Vi bygger AI-løsninger der virker — til danske SMV&apos;er" />
             <div className="grid gap-10 md:grid-cols-2">
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-white">
-                  AI skal ikke være kompliceret
-                </h3>
+                <h3 className="text-xl font-bold text-white">AI skal ikke være kompliceret</h3>
                 <p className="text-sm leading-relaxed text-muted-light">
-                  Tekup Digital er grundlagt med én mission: gøre AI tilgængeligt for danske
-                  SMV&apos;er uden store IT-afdelinger. Vi bygger AI-agenter, hjemmesider og
-                  chatbots der sparer tid og skaber resultater — fra dag ét.
+                  Tekup Digital er grundlagt med én mission: gøre AI tilgængeligt for danske SMV&apos;er uden store IT-afdelinger. Vi bygger AI-agenter, hjemmesider og chatbots der sparer tid og skaber resultater — fra dag ét.
                 </p>
                 <p className="text-sm leading-relaxed text-muted-light">
-                  Vores løsninger kører på Cloudflare&apos;s infrastruktur og er designet til at
-                  være hurtige, sikre og GDPR-compliant. Vi bruger selv teknologieme vi sælger
-                  — vores egen AI-assistent Tekko er et levende bevis.
+                  Vores løsninger kører på Cloudflare&apos;s infrastruktur og er designet til at være hurtige, sikre og GDPR-compliant. Vi bruger selv teknologierne vi sælger — vores egen AI-assistent Tekko er et levende bevis.
                 </p>
                 <div className="flex items-center gap-3 pt-2">
                   <TekkoMascot state="idle" size="sm" />
-                  <span className="text-xs text-muted">
-                    Tekko, vores interne AI-maskot — til stede i hele produktet.
-                  </span>
+                  <span className="text-xs text-muted">Tekko, vores interne AI-maskot — til stede i hele produktet.</span>
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-white">
-                  Vores værdier
-                </h3>
+                <h3 className="text-xl font-bold text-white">Vores værdier</h3>
                 <ul className="space-y-4">
                   {[
                     { title: "Enkelthed", desc: "Vi skærer igennem kompleksiteten. AI skal være lige til at tage i brug." },
@@ -547,69 +442,28 @@ export default function HomePage() {
         </section>
       </RevealSection>
 
-      {/* ============ CONTACT ============ */}
       <RevealSection>
         <section id="kontakt" className="scroll-mt-20 py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <SectionHeader
-              title="Klar til at komme i gang?"
-              subtitle="Book en uforpligtende 30-minutters samtale. Vi finder den rigtige løsning til dig."
-            />
-
+            <SectionHeader title="Klar til at komme i gang?" subtitle="Book en uforpligtende 30-minutters samtale. Vi finder den rigtige løsning til dig." />
             <div className="mx-auto max-w-4xl rounded-xl border border-border bg-gradient-to-b from-emerald-950/20 to-amber-950/20 p-8 sm:p-12">
               <div className="grid gap-10 md:grid-cols-2">
-                {/* Contact info */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-bold text-white">Kontaktinformation</h3>
                   <div className="space-y-4">
-                    <ContactInfo
-                      icon={
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                      }
-                      label="Email"
-                      value="hej@tekup.dk"
-                      href="mailto:hej@tekup.dk"
-                    />
-                    <ContactInfo
-                      icon={
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                      }
-                      label="Telefon"
-                      value="+45 91 72 55 99"
-                      href="tel:+4591725599"
-                    />
-                    <ContactInfo
-                      icon={
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      }
-                      label="Adresse"
-                      value="M.P. Bruuns Gade 36, 8000 Aarhus C"
-                    />
+                    <ContactInfo icon={<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>} label="Email" value="hej@tekup.dk" href="mailto:hej@tekup.dk" />
+                    <ContactInfo icon={<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>} label="Telefon" value="+45 91 72 55 99" href="tel:+4591725599" />
+                    <ContactInfo icon={<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>} label="Adresse" value="M.P. Bruuns Gade 36, 8000 Aarhus C" />
                   </div>
-
-                  <p className="text-xs text-muted">
-                    Vi svarer typisk inden for 2 timer i hverdagene.
-                  </p>
-
+                  <p className="text-xs text-muted">Vi svarer typisk inden for 2 timer i hverdagene.</p>
                   <div className="flex items-center gap-4 border-t border-border pt-6">
                     <TekkoMascot state="idle" size="md" />
                     <div>
                       <p className="text-sm font-semibold text-white">Tekko læser med på behovet.</p>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-light">
-                        Skriv bare kort. Vi omsætter det til næste praktiske skridt.
-                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-light">Skriv bare kort. Vi omsætter det til næste praktiske skridt.</p>
                     </div>
                   </div>
                 </div>
-
-                {/* Contact form */}
                 <ContactForm />
               </div>
             </div>
@@ -624,31 +478,13 @@ export default function HomePage() {
    SUB-COMPONENTS
    ============================================ */
 
-function ContactInfo({
-  icon,
-  label,
-  value,
-  href,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  href?: string;
-}) {
+function ContactInfo({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href?: string }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand-light">
-        {icon}
-      </div>
+      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand-light">{icon}</div>
       <div>
         <p className="text-sm text-muted">{label}</p>
-        {href ? (
-          <a href={href} className="font-medium text-white transition-colors hover:text-brand-light">
-            {value}
-          </a>
-        ) : (
-          <p className="font-medium text-white">{value}</p>
-        )}
+        {href ? <a href={href} className="font-medium text-white transition-colors hover:text-brand-light">{value}</a> : <p className="font-medium text-white">{value}</p>}
       </div>
     </div>
   );
@@ -656,18 +492,18 @@ function ContactInfo({
 
 const SERVICE_OPTIONS = [
   { value: "", label: "Vælg hvad du er interesseret i..." },
-  { value: "website-starter", label: "Website Starter — 14.999 kr." },
-  { value: "website-pro", label: "Website Pro — 34.999 kr." },
+  { value: "website-starter", label: "Website Starter — 4.999 kr." },
+  { value: "website-pro", label: "Website Pro — 14.999 kr." },
   { value: "support-agent", label: "AI Support Agent — 2.499 kr./md." },
   { value: "sales-agent", label: "AI Sales Agent — 3.999 kr./md." },
   { value: "admin-agent", label: "Admin Agent — 1.999 kr./md." },
-  { value: "bundle-full", label: "Fuld pakke — spar 20%" },
+  { value: "chatbot", label: "Chatbot Basis — 999 kr./md." },
+  { value: "bundle-full", label: "Fuldt Bundle — 5.999 kr./md." },
   { value: "seo-compliance", label: "SEO & Compliance — fra 999 kr." },
   { value: "other", label: "Andet / ved ikke endnu" },
 ];
 
 type FormField = "name" | "email" | "message";
-
 type FieldErrors = Partial<Record<FormField, string>>;
 
 function validateField(field: FormField, value: string): string {
@@ -691,10 +527,12 @@ function Spinner() {
 }
 
 function ContactForm() {
+  const formId = useId();
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Partial<Record<FormField, boolean>>>({});
+  const getErrorId = (field: FormField) => `${formId}-${field}-error`;
 
   const validateForm = useCallback((data: FormData): boolean => {
     const errors: FieldErrors = {};
@@ -716,11 +554,20 @@ function ContactForm() {
     };
   }, []);
 
+  const hasError = (field: FormField) => Boolean(touched[field] && fieldErrors[field]);
+  const isValid = (field: FormField) => Boolean(touched[field] && !fieldErrors[field]);
+  const fieldClass = (field: FormField) => `w-full rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
+    hasError(field)
+      ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
+      : isValid(field)
+        ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
+        : "border-border focus:border-brand/50 focus:ring-brand/20"
+  }`;
+
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
-
     if (!validateForm(data)) return;
 
     const name = data.get("name") as string;
@@ -743,7 +590,6 @@ function ContactForm() {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || "Kunne ikke sende besked");
       }
-
       setState("sent");
     } catch (err) {
       setState("error");
@@ -753,119 +599,45 @@ function ContactForm() {
 
   if (state === "sent") {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-brand/20 bg-brand/5 px-6 py-12 text-center">
+      <div className="flex flex-col items-center justify-center rounded-xl border border-brand/20 bg-brand/5 px-6 py-12 text-center" role="status" aria-live="polite">
         <TekkoMascot state="success" size="lg" />
         <h3 className="mt-4 text-lg font-bold text-white">Tak for din henvendelse!</h3>
-        <p className="mt-2 text-sm text-muted-light">
-          Tekko har sendt beskeden videre. Vi vender tilbage inden for 24 timer — typisk meget hurtigere.
-        </p>
+        <p className="mt-2 text-sm text-muted-light">Tekko har sendt beskeden videre. Vi vender tilbage inden for 24 timer — typisk meget hurtigere.</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <div>
-        <label htmlFor="service" className="mb-1 block text-sm font-medium text-muted-light">
-          Jeg er interesseret i
-        </label>
-        <select
-          id="service"
-          name="service"
-          className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
-        >
-          {SERVICE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-card text-white">
-              {opt.label}
-            </option>
-          ))}
+        <label htmlFor="service" className="mb-1 block text-sm font-medium text-muted-light">Jeg er interesseret i</label>
+        <select id="service" name="service" className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20">
+          {SERVICE_OPTIONS.map((opt) => <option key={opt.value} value={opt.value} className="bg-card text-white">{opt.label}</option>)}
         </select>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-1 block text-sm font-medium text-muted-light">
-            Navn <span className="text-brand">*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            placeholder="Dit navn"
-            onBlur={handleBlur("name")}
-            className={`w-full rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
-              touched.name && fieldErrors.name
-                ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
-                : touched.name && !fieldErrors.name
-                  ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
-                  : "border-border focus:border-brand/50 focus:ring-brand/20"
-            }`}
-          />
-          {touched.name && fieldErrors.name && (
-            <p className="mt-1 text-xs text-red-400">{fieldErrors.name}</p>
-          )}
+          <label htmlFor="name" className="mb-1 block text-sm font-medium text-muted-light">Navn <span className="text-brand">*</span></label>
+          <input type="text" id="name" name="name" required placeholder="Dit navn" onBlur={handleBlur("name")} aria-invalid={hasError("name")} aria-describedby={hasError("name") ? getErrorId("name") : undefined} className={fieldClass("name")} />
+          {hasError("name") && <p id={getErrorId("name")} className="mt-1 text-xs text-red-400">{fieldErrors.name}</p>}
         </div>
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium text-muted-light">
-            Email <span className="text-brand">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            placeholder="din@email.dk"
-            onBlur={handleBlur("email")}
-            className={`w-full rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
-              touched.email && fieldErrors.email
-                ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
-                : touched.email && !fieldErrors.email
-                  ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
-                  : "border-border focus:border-brand/50 focus:ring-brand/20"
-            }`}
-          />
-          {touched.email && fieldErrors.email && (
-            <p className="mt-1 text-xs text-red-400">{fieldErrors.email}</p>
-          )}
+          <label htmlFor="email" className="mb-1 block text-sm font-medium text-muted-light">Email <span className="text-brand">*</span></label>
+          <input type="email" id="email" name="email" required placeholder="din@email.dk" onBlur={handleBlur("email")} aria-invalid={hasError("email")} aria-describedby={hasError("email") ? getErrorId("email") : undefined} className={fieldClass("email")} />
+          {hasError("email") && <p id={getErrorId("email")} className="mt-1 text-xs text-red-400">{fieldErrors.email}</p>}
         </div>
       </div>
       <div>
-        <label htmlFor="company" className="mb-1 block text-sm font-medium text-muted-light">
-          Virksomhed
-        </label>
-        <input
-          type="text"
-          id="company"
-          name="company"
-          placeholder="Dit firmanavn (valgfrit)"
-          className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20"
-        />
+        <label htmlFor="company" className="mb-1 block text-sm font-medium text-muted-light">Virksomhed</label>
+        <input type="text" id="company" name="company" placeholder="Dit firmanavn (valgfrit)" className="w-full rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:border-brand/50 focus:ring-1 focus:ring-brand/20" />
       </div>
       <div>
-        <label htmlFor="message" className="mb-1 block text-sm font-medium text-muted-light">
-          Besked <span className="text-brand">*</span>
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          required
-          rows={4}
-          placeholder="Fortæl lidt om din virksomhed og hvad du har brug for..."
-          onBlur={handleBlur("message")}
-          className={`w-full resize-none rounded-lg border bg-card/50 px-4 py-2.5 text-sm text-white placeholder-muted outline-none transition-colors focus:ring-1 ${
-            touched.message && fieldErrors.message
-              ? "border-red-400/50 focus:border-red-400/60 focus:ring-red-400/20"
-              : touched.message && !fieldErrors.message
-                ? "border-brand/40 focus:border-brand/50 focus:ring-brand/20"
-                : "border-border focus:border-brand/50 focus:ring-brand/20"
-          }`}
-        />
-        {touched.message && fieldErrors.message && (
-          <p className="mt-1 text-xs text-red-400">{fieldErrors.message}</p>
-        )}
+        <label htmlFor="message" className="mb-1 block text-sm font-medium text-muted-light">Besked <span className="text-brand">*</span></label>
+        <textarea id="message" name="message" required rows={4} placeholder="Fortæl lidt om din virksomhed og hvad du har brug for..." onBlur={handleBlur("message")} aria-invalid={hasError("message")} aria-describedby={hasError("message") ? getErrorId("message") : undefined} className={`${fieldClass("message")} resize-none`} />
+        {hasError("message") && <p id={getErrorId("message")} className="mt-1 text-xs text-red-400">{fieldErrors.message}</p>}
       </div>
       {state === "error" && (
-        <div className="flex items-center gap-3 rounded-xl border border-red-400/20 bg-red-500/5 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-xl border border-red-400/20 bg-red-500/5 px-4 py-3" role="alert">
           <TekkoMascot state="error" size="sm" showGlow={false} />
           <div>
             <p className="text-sm font-semibold text-red-200">Beskeden kunne ikke sendes</p>
@@ -873,62 +645,38 @@ function ContactForm() {
           </div>
         </div>
       )}
-
       {state === "sending" && (
-        <div className="flex items-center gap-3 rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-xl border border-cyan-400/20 bg-cyan-400/5 px-4 py-3" role="status" aria-live="polite">
           <TekkoMascot state="working" size="sm" showGlow={false} />
           <div>
             <p className="text-sm font-semibold text-white">Tekko sender beskeden...</p>
-            <p className="text-xs text-muted-light">Beskeden krypteres og sendes sikkert til teamet.</p>
+            <p className="text-xs text-muted-light">Beskeden sendes via en sikker forbindelse til teamet.</p>
           </div>
         </div>
       )}
-
-      <button
-        type="submit"
-        disabled={state === "sending"}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-6 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50"
-      >
-        {state === "sending" ? (
-          <>
-            <Spinner /> Sender...
-          </>
-        ) : (
-          "Send besked"
-        )}
+      <button type="submit" disabled={state === "sending"} aria-busy={state === "sending"} className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-6 py-3 font-semibold text-white transition-all hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-brand disabled:opacity-50">
+        {state === "sending" ? <><Spinner /> Sender...</> : "Send besked"}
       </button>
-      <p className="text-center text-xs text-muted">
-        Vi deler aldrig dine oplysninger med tredjepart.
-      </p>
+      <p className="text-center text-xs text-muted">Vi deler aldrig dine oplysninger med tredjepart.</p>
     </form>
   );
 }
 
-function FAQItem({ question, answer }: { question: string; answer: string }) {
+function FAQItem({ index, question, answer }: { index: number; question: string; answer: string }) {
   const [open, setOpen] = useState(false);
+  const buttonId = `faq-${index}-button`;
+  const panelId = `faq-${index}-panel`;
 
   return (
     <div className="rounded-xl border border-border bg-card/50 transition-colors hover:bg-card/80">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-6 py-4 text-left"
-        aria-expanded={open}
-      >
+      <button id={buttonId} onClick={() => setOpen(!open)} className="flex w-full items-center justify-between px-6 py-4 text-left" aria-expanded={open} aria-controls={panelId}>
         <span className="pr-4 text-sm font-medium text-white">{question}</span>
-        <svg
-          className={`h-4 w-4 shrink-0 text-muted transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
+        <svg className={`h-4 w-4 shrink-0 text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       {open && (
-        <div className="border-t border-border px-6 pb-4 pt-3">
+        <div id={panelId} role="region" aria-labelledby={buttonId} className="border-t border-border px-6 pb-4 pt-3">
           <p className="text-sm leading-relaxed text-muted-light">{answer}</p>
         </div>
       )}
