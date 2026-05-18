@@ -2,14 +2,15 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://tekup.dk";
+const BASE_URL = "https://tekup.dk";
+const LAST_MODIFIED = new Date("2026-05-17T00:00:00.000Z");
 
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    { url: base, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
-    { url: `${base}/tekko`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
-    { url: `${base}/privatliv`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
-    { url: `${base}/cookies`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
-    { url: `${base}/vilkar`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
+    { url: BASE_URL, lastModified: LAST_MODIFIED, changeFrequency: "weekly", priority: 1.0 },
+    { url: `${BASE_URL}/tekko`, lastModified: LAST_MODIFIED, changeFrequency: "monthly", priority: 0.2 },
+    { url: `${BASE_URL}/privatliv`, lastModified: LAST_MODIFIED, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${BASE_URL}/cookies`, lastModified: LAST_MODIFIED, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${BASE_URL}/vilkar`, lastModified: LAST_MODIFIED, changeFrequency: "monthly", priority: 0.3 },
   ];
 }

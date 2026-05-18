@@ -30,6 +30,9 @@ jobs:
       - name: Verify Tekko mascot system
         run: npm run verify:tekko
 
+      - name: Verify release gate
+        run: npm run verify:release
+
       - name: Lint
         run: npm run lint
 

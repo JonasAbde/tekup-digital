@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "verify:tekko": "node scripts/verify-tekko.mjs",
+    "verify:release": "node scripts/verify-release.mjs",
     "generate:og": "node scripts/generate-og-image.mjs"
   },
   "dependencies": {
